@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  {include file="public:header"}
+  <body>
+    <div data-role="page" id="new" data-theme="c">
+      <div class="ui-content" data-role="main" data-theme="c">
+        <div class="flex flex-between">
+          <div class="info">
+            <p>昵称: {$re.username}</p>
+            <p>剩余能量: {$re.money}</p>
+          </div>
+          <div class="action">
+            <div class="rule"></div><a class="user" data-ajax="false" href="{:url('User/index')}"></a><a class="video" data-ajax="false" href="{:url('News/video')}"></a>
+          </div>
+        </div>
+        <div class="test"></div>
+        <div class="pb"><a href="invade.html" data-role="button" data-theme="c">寻找宿主</a></div>
+        <div class="rule-wrapper">
+          <ul class="inner">
+            {$reb.desc}
+            <div class="rpb">注：本活动最终解释权归{$sys.name}公司所有</div>
+          </ul>
+        </div>
+        <div class="pay-wrapper">
+          <div class="codeimg"><img src="__HOME__/img/ercode.png"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

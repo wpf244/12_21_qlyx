@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+<!--头部-->
+{include file="public:nav"}
+
+<div class="main-container ace-save-state" id="main-container">
+  <!--菜单-->
+  <script type="text/javascript">
+  try{ace.settings.loadState('main-container')}catch(e){}
+</script>
+
+{include file="public:left"}
+
+  <div class="main-content">
+    <div class="main-content-inner">
+      <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="{:url('Index/index')}">首页</a>
+          </li>
+          <li class="active">会员列表</li>
+        </ul><!-- /.breadcrumb -->
+
+      </div>
+
+      <div class="page-content">
+        {include file="public:set"}
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="col-sm-10 col-sm-offset-1">
+              <div class="page-header">
+                <div class="row">
+                <div class="col-sm-4">
+                <a class="btn btn-success btn-white btn-bold" href="{:url('Member/add')}">
+                  <i class="ace-icon fa fa-plus icon-only"></i>
+                  添加</a>
+                </div>
+                </div>
+              </div>
+              <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>会员编号</th>                  
+                  <th class="hidden-480">会员名</th>
+                  <th class="hidden-480">级别</th>
+                  <th class="hidden-480">手机号码</th>
+                  <th class="hidden-480">微信号</th>
+                  <th class="hidden-480">支付宝号</th>
+                  <th class="hidden-480">推荐人</th>
+                  <th class="hidden-480">注册时间</th>
+                  <th class="hidden-480">是否激活</th>
+                  <th class="hidden-480">激活时间</th>
+                  <th style="border-right:#ddd solid 1px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="v"}
+                <tr class="ace-thumbnails">
+              
+                  <td><span class="badge badge-grey">{$v.uid}</span></td>
+                  <td>{$v.u_code}</td>
+                  <td>{$v.u_name}</td>
+                  <td>{$v.level}</td>
+                  <td class="hidden-480">{$v.u_phone}</td>
+                  <td class="hidden-480">{$v.u_wx}</td>
+                  <td class="hidden-480">{$v.u_alipay}</td>
+                  <?php $pid=$v['pid']; $user=db("user")->where("uid=$pid")->find();?>
+                  <td class="hidden-480">{$user['u_name']}</td>
+                  <td class="hidden-480">{$v.u_ztime|date="Y-m-d H:i:s",###}</td>
+                  <td>
+                     <div onclick="change({$v.uid},{$v.u_status})"> {if condition="$v.u_status eq 1" }<a  class="btn btn-xs btn-info">是</a> {else /} <a class="btn btn-xs btn-danger">否</a>{/if}</div>
+                  </td>
+                  <td class="hidden-480">{if condition="$v.u_jtime neq '' "}{$v.u_jtime|date="Y-m-d H:i:s",###}{/if}</td>
+                  <td>
+                    
+                    <a class="btn btn-xs btn-info" href="{:url('Member/modifys',array('id'=>$v['uid']))}" title="修改">
+                      <i class="ace-icon fa fa-pencil bigger-120"></i>
+                    </a>
+                    <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.uid})" title="删除">
+                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    </button>
+                  </td>
+                </tr>
+                {/volist}
+                {empty name="list"}<tr><td colspan="11" class="text-center">暂无数据</td></tr>{/empty}
+                </tbody>
+
+              </table>
+              <div class="text-center">
+                <ul class="pagination" id="result">
+                  {$page}
+                </ul>
+              </div>
+            </div>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.page-content -->
+    </div>
+  </div><!-- /.main-content -->
+
+{include file="public:footer"}
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+  <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+</div><!-- /.main-container -->
+
+
+<script>
+  jQuery(function($) {
+    $('[data-rel=tooltip]').tooltip();
+
+    $( "#hide-option" ).tooltip({
+      hide: {
+        effect: "explode",
+        delay: 250
+      }
+    });
+
+  })
+</script>
+<script type="text/javascript">
+		function dels(id){
+			layer.confirm('你确定删除此会员吗？', {icon: 3}, function(index){
+		    layer.close(index);
+		    $.ajax({
+            type:"post",
+            url:"{:url('Member/delete')}",
+              data:{id:id},
+              datatype:"text",
+              success:function(re){
+                if(re == 2 || re==1){
+                    layer.msg("系统繁忙请稍后再试");
+                    location.href="{:url('Member/lister')}";
+                }
+                
+                if(re == 0){
+                  layer.msg("删除成功")
+                  location.href="{:url('Member/lister')}";
+                }
+              }
+          })
+		  });
+	    }
+		</script>
+<script>
+function change(id,status){
+ if(status == 0){
+	layer.confirm('你确定激活此会员吗？', {icon: 3}, function(index){
+		    layer.close(index);
+		    $.ajax({
+            type:"post",
+            url:"{:url('Member/change')}",
+              data:{id:id},
+              datatype:"text",
+              success:function(re){
+                if(re == 2 || re==0){
+                    layer.msg("系统繁忙请稍后再试");
+                    location.href="{:url('Member/lister')}";
+                }
+                
+                if(re == 1){
+                  layer.msg("激活成功")
+                  location.href="{:url('Member/lister')}";
+                }
+              }
+          })
+		  });
+ }else{
+  layer.confirm('你确定关闭此会员吗？', {icon: 3}, function(index){
+		    layer.close(index);
+		    $.ajax({
+            type:"post",
+            url:"{:url('Member/changes')}",
+              data:{id:id},
+              datatype:"text",
+              success:function(re){
+                if(re == 2 || re==0){
+                    layer.msg("系统繁忙请稍后再试");
+                    location.href="{:url('Member/lister')}";
+                }
+                
+                if(re == 1){
+                  layer.msg("关闭成功")
+                  location.href="{:url('Member/lister')}";
+                }
+              }
+          })
+		  });
+ } 
+
+}
+
+</script>
+
+
+  <script>
+  $("#change").click(function(){
+  	$("#sortForm").submit();
+  })
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  {include file="public:header"}
+  <body>
+    <div data-role="page" id="video" data-theme="c">
+      <div class="ui-content" data-role="main" data-theme="c">
+        <div class="header">视频中心<a class="back" href="#" data-rel="back"></a></div>
+        <div class="scroll">
+          <ul class="nostyle"></ul>
+         {volist name="res" id="v"}
+          <li class="video-item" onclick="change({$v.id})"><a href="{$v.url}" target="_blank"><img src="../../{$v.thumb}" alt="">
+              <div class="content">
+                <h2 class="title text-overflow">{$v.title}</h2>
+                <p class="desc text-overflow">{$v.marray}</p>
+                <div><span>{$v.play}次播放</span><span>{$v.time|date="Y-m-d",###}</span></div>
+              </div></a></li>
+          {/volist}
+        </div>
+      </div>
+    </div>
+    <script>
+        function change(id){
+          $.ajax({
+            type:"post",
+            url:"{:url('News/change')}",
+              data:{id:id},
+              datatype:"text",
+              success:function(){
+                
+              }
+          })
+        }
+        </script>
+  </body>
+</html>

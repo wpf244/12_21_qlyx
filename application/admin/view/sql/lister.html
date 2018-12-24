@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+  <!--头部-->
+  {include file="public:nav"}
+
+  <div class="main-container ace-save-state" id="main-container">
+    <!--菜单-->
+    <script type="text/javascript">
+      try {
+        ace.settings.loadState('main-container')
+      } catch (e) {}
+    </script>
+
+    {include file="public:left"}
+
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+          <ul class="breadcrumb">
+            <li>
+              <i class="ace-icon fa fa-home home-icon"></i>
+              <a href="{:url('Index/index')}">首页</a>
+            </li>
+            <li class="active">数据库管理</li>
+            <li class="active">数据库备份</li>
+          </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <div class="page-content">
+          {include file="public:set"}
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="col-sm-10 col-sm-offset-1">
+                <div class="page-header">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <button class="btn btn-success btn-white btn-bold" onclick="backups()">
+                        <i class="ace-icon fa fa-plus icon-only"></i>
+                        备份</button>
+                    </div>
+                  </div>
+                </div>
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      
+                      <th>ID</th>
+                      <th>文件名</th>
+                      <th>备份时间</th>
+                      <th style="border-right:#ddd solid 1px;">操作</th>
+                    </tr>
+                  </thead>
+                 
+                    <tbody>
+                      {volist name="list" id="v"}
+                      <tr class="ace-thumbnails">
+                       
+                        <td><span class="badge badge-grey">{$v.sql_id}</span></td>
+                        <td>{$v.sql_name}</td>
+                        <td>{$v.create_time|date="Y-m-d H:i:s",###}</td>
+                        <td>
+                          <a class="btn btn-xs btn-info" href="__ROOT__/Data/{$v.sql_name}" download="{$v.sql_name}" title="下载">
+                            <i class="ace-icon fa fa-download bigger-120"></i>
+                          </a>
+                         
+                          <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.sql_id})" title="删除">
+                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      {/volist}
+                      {empty name="list"}<tr>
+                        <td colspan="11" class="text-center">暂无数据</td>
+                      </tr>{/empty}
+                    </tbody>
+                  </form>
+                </table>
+                <div class="text-center">
+                  {$page}
+                </div>
+              </div>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.page-content -->
+      </div>
+    </div><!-- /.main-content -->
+
+    {include file="public:footer"}
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+      <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+  </div><!-- /.main-container -->
+
+  <script>
+    jQuery(function ($) {
+      $('[data-rel=tooltip]').tooltip();
+
+      $("#hide-option").tooltip({
+        hide: {
+          effect: "explode",
+          delay: 250
+        }
+      });
+
+    })
+
+  
+  </script>
+  <script type="text/javascript">
+    function dels(id) {
+      layer.confirm('你确定删除吗？', {
+        icon: 3
+      }, function (index) {
+        layer.close(index);
+        $.ajax({
+          url: "{:url('sql/sql_delete')}",
+          type: 'post',
+          data: {id: id},
+          success: function(data){
+            if(data.code == 1){
+              layer.msg(data.msg, {icon: 6});
+              setTimeout(function(){
+                window.location.href = "{:url('Sql/lister')}"
+              },2000);
+            }else{
+              layer.msg(data.msg, {icon: 5});
+            }
+          }
+        })
+      });
+    }
+
+  
+  </script>
+  <script>
+   
+    function backups(){
+        $.ajax({
+            url: "{:url('Sql/backups_exe')}",
+            success: function(data){
+                
+                  if(data.code == 1){
+                    layer.msg(data.msg, {icon: 1});
+                    setTimeout(function(){
+                      window.location.href = "{:url('Sql/lister')}"
+                    },2000);
+                  }else{
+                    layer.msg(data.msg, {icon: 5});
+                  }
+               
+            }
+        })
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+  <!--头部-->
+  {include file="public:nav"}
+
+  <div class="main-container ace-save-state" id="main-container">
+    <!--菜单-->
+    <script type="text/javascript">
+      try { ace.settings.loadState('main-container') } catch (e) { }
+    </script>
+
+    {include file="public:left"}
+
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+          <ul class="breadcrumb">
+            <li>
+              <i class="ace-icon fa fa-home home-icon"></i>
+              <a href="{:url('Index/index')}">首页</a>
+            </li>
+            <li class="active">菜单管理</li>
+            <li class="active">后台模块</li>
+          </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <div class="page-content">
+          {include file="public:set"}
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="col-sm-10 col-sm-offset-1">
+                <div class="page-header">
+                  <div class="row">
+                    <div class="col-sm-2">
+                      <a class="btn btn-success btn-white btn-bold" href="{:url('Carte/add')}">
+                        <i class="ace-icon fa fa-plus icon-only"></i>
+                        添加</a>
+                      <!-- <button class="btn btn-danger btn-white btn-bold del-btn">
+                  <i class="ace-icon fa fa-trash-o icon-only"></i>
+                  删除
+                </button> -->
+                    </div>
+
+                    <div class="col-sm-8 clearfix">
+                  
+                </div>
+                  </div>
+                </div>
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class="center">
+                      </th>
+                      <th>分类名称</th>
+                      <th class="hidden-480">模块</th>
+                      <th class="hidden-480">图标</th>
+                      <th class="hidden-480">排序</th>
+                      <!-- <th style="border-right:#ddd solid 1px;">操作</th> -->
+                    </tr>
+                  </thead>
+                    <tbody>
+                      {volist name="list" id="v"}
+  
+                      <tr class="ace-thumbnails tri{$v.cid}" id="tr{$v.cid}">
+                        <td class="center"><span class="glyphicon glyphicon-plus" power="jia" id="jiajian{$v.cid}" onclick="gg({$v.cid})"></span>	<!-- glyphicon glyphicon-minus -->
+                        </td>
+                        <td class="ace-thumbnails hidden-480">{$v.c_name}</td>
+                        <td class="ace-thumbnails hidden-480">{$v.c_modul}</td>
+                        <td class="ace-thumbnails hidden-480">{$v.c_icon}</td>
+                        <td class="ace-thumbnails hidden-480"><input type="number" class="sort input-common input-common-sort" fieldid="{$v['cid']}" fieldname="c_sort" value="{$v['c_sort']}" size="1"></td>
+                        <td>
+                          <a class="btn btn-xs btn-info" href="{:url('Carte/modifys',array('id'=>$v.cid))}" title="修改信息">
+                            <i class="ace-icon fa fa-pencil bigger-120"></i>
+                          </a>
+                          <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.cid})" title="删除">
+                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                          </button>
+                        </td> 
+                      </tr>
+                        {volist name="$v['lists']" id="p"}
+                            
+                            <tr class="ace-thumbnails tr{$p.pid} tri{$p.cid}" style="display:none;">
+                                <td class="center">
+                                </td>
+                                <td class="ace-thumbnails hidden-480">&nbsp&nbsp&nbsp&nbsp|--{$p.c_name}</td>
+                                <td class="ace-thumbnails hidden-480">&nbsp&nbsp&nbsp&nbsp|--{$p.c_modul}</td>
+                                <td class="ace-thumbnails hidden-480"></td>
+                                <td class="ace-thumbnails hidden-480"><input type="number" class="sort input-common input-common-sort" fieldid="{$v['cid']}" fieldname="c_sort" value="{$v['c_sort']}" size="1"></td>
+                                 <td>
+                                    <a class="btn btn-xs btn-info" href="{:url('Carte/modifys',array('id'=>$p['cid']))}" title="修改信息">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </a>
+                                    <button class="btn btn-xs btn-danger" type="button" onclick="dels({$p['cid']})" title="删除">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </button>
+                                </td> 
+                            </tr>
+                            
+                        {/volist}
+                     
+                      {/volist}
+                      {empty name="list"}<tr>
+                        <td colspan="15" class="text-center">暂无数据</td>
+                      </tr>{/empty}
+                    </tbody>
+                  <input type="file" id="other_img" name="other_img" style="display:none">
+                </table>
+                <div class="text-center">
+                </div>
+              </div>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.page-content -->
+      </div>
+    </div><!-- /.main-content -->
+
+   {include file="public:footer"}
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+      <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+  </div><!-- /.main-container -->
+
+
+
+  <script>
+    jQuery(function ($) {
+
+      $(".sort").change(function(){
+        var fieldid = $(this).attr('fieldid');
+        var fieldname = $(this).attr('fieldname');
+        var fieldvalue = $(this).val();
+        if(fieldvalue == ''){
+          layer.msg("不能为空");return false;
+        }else{
+          $.ajax({
+            type:"post",
+            url:"{:url('Carte/change_sort')}",
+            data:{'fieldid':fieldid,'fieldname':fieldname,'fieldvalue':fieldvalue},
+            success: function (data) {
+              if(data>0){
+                layer.msg("修改成功");location.reload();
+              }else{
+                layer.msg("修改失败");
+              }
+            }
+          });
+        }
+      });
+
+      $('[data-rel=tooltip]').tooltip();
+
+      $("#hide-option").tooltip({
+        hide: {
+          effect: "explode",
+          delay: 250
+        }
+      });
+
+    })
+  
+    function look_profile(id){
+      event.preventDefault();
+      var lookprofile = $('#lookprofile' + id);
+      var name = lookprofile.attr('name');
+      var profile = lookprofile.attr('profile');
+      $(".modal-title").text(name);
+      $(".modal-body").text(profile);    
+      $('#look_profile').modal('show');
+    }
+
+    function dels(id) {
+      layer.confirm('你确定删除吗？', { icon: 3 }, function (index) {
+        layer.close(index);
+        $.ajax({
+          url: '__URL__/delete',
+          type: 'post',
+          data: { id: id },
+          success: function (data) {
+            if(data == 0){
+               layer.msg("删除成功");
+               location.reload();
+            }else{
+              layer.msg("系统繁忙，请稍后再试");
+              location.reload();
+            }
+          }
+        })
+      });
+    }
+
+    function change(id){
+        $.ajax({
+            type:"post",
+            url:"__URL__/change",
+            data:{id:id},
+            datatype:"text",
+            success:function(){
+                
+            }
+        })
+    }
+
+    function gg(id){
+        var ggid = $("#jiajian"+id);
+        if(ggid.attr('power') == 'jia'){
+            ggid.attr('class','glyphicon glyphicon-minus')
+            ggid.attr('power','jian')
+            $(".tr"+id).attr('style','display:black;')
+        }else{
+            ggid.attr('class','glyphicon glyphicon-plus')
+            ggid.attr('power','jia')
+            $(".tr"+id).attr('style','display:none;')
+        }
+        
+    }
+  </script>
+</body>
+
+</html>

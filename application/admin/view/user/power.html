@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+    <!--头部-->
+    {include file="public:nav"}
+
+    <div class="main-container ace-save-state" id="main-container">
+        <!--菜单-->
+        <script type="text/javascript">
+            try {
+                ace.settings.loadState('main-container')
+            } catch (e) {}
+        </script>
+
+        {include file="public:left"}
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="{:url('Index/index')}">首页</a>
+                        </li>
+                        <li class="active">权限控制</li>
+                    </ul><!-- /.breadcrumb -->
+
+                </div>
+
+                <div class="page-content">
+
+                    {include file="public:set"}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <form id="logoForm" class="form-horizontal" action="{:url('User/power_save')}" method="post" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="widget-box transparent">
+                                                <div class="widget-header widget-header-flat">
+                                                    <h4 class="widget-title"><i class="ace-icon fa fa-leaf green"></i>权限选择</h4>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
+                                                        {volist name="list" id="m"}
+                                                      
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right" for=""><b>{$m.c_name}</b></label>
+                                                            <div class="col-sm-10">
+                                                                <label style="padding-top: 8px">
+                                                                    <input id="statu{$m.cid}" name="controller[{$m.cid}]" class="ace ace-switch ace-switch-6 finput" type="checkbox" {if condition="in_array($m.cid,$control_arr)"}checked{/if} >
+                                                                    <span class="lbl"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                       
+                                                        {volist name="$m['lists']" id="m2"}
+                                                       
+                                                            <label class="col-sm-2 control-label no-padding-right" for="">{$m2.c_name}</label>
+                                                            <div class="col-sm-2">
+                                                                <label style="padding-top: 8px">
+                                                                    <input id="statu{$m2.cid}" name="function[{$m2.cid}]" class="ace ace-switch ace-switch-6" type="checkbox" {if condition="in_array($m2.cid,$way_arr)"}checked{/if} >
+                                                                    <span class="lbl"></span>
+                                                                </label>
+                                                            </div>
+                                                      
+                                                        {/volist}
+                                                    
+                                                        </div>
+                                                        <hr/>
+                                                  
+                                                        {/volist}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="id" value="{$admin.id}"/>
+                                    <div class="clearfix form-actions">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button class="btn btn-info" type="submit">
+                                                <i class="ace-icon fa fa-floppy-o bigger-110"></i>
+                                                保存
+                                            </button>
+                                            <a class="btn" href="{:url('User/lister')}">
+                                                <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                返回
+                                            </a>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- PAGE CONTENT BEGINS -->
+                            </div>
+                            <!-- PAGE CONTENT ENDS -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.page-content -->
+            </div>
+        </div><!-- /.main-content -->
+
+       {include file="public:footer"}
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div><!-- /.main-container -->
+
+
+    <script>
+        jQuery(function ($) {
+            $('[data-rel=tooltip]').tooltip();
+
+            $("#hide-option").tooltip({
+                hide: {
+                    effect: "explode",
+                    delay: 250
+                }
+            });
+
+        })
+    </script>
+
+
+    <script>
+        $(function () {
+            // 全选
+            $('.finput').click(function() {
+                var sta = $(this).prop('checked'),
+                group = $(this).parents('.form-group')
+                group.next().find('.ace-switch').prop('checked', sta)
+            })
+            
+            // 单选
+            $('.ace-switch').click(function() {
+                var group = $(this).parents('.form-group'),
+                    bol = group.find('.ace-switch:checked').length === 0
+                group.prev().find('.finput').prop('checked', !bol)
+            })
+
+
+
+            $('#thumb').ace_file_input({
+                style: 'well',
+                btn_choose: '封面图',
+                btn_change: null,
+                no_icon: 'ace-icon fa fa-picture-o',
+                droppable: true,
+                thumbnail: 'fit' //large | fit
+                    //,icon_remove:null//set null, to hide remove/reset button
+                    /**,before_change:function(files, dropped) {
+						//Check an example below
+						//or examples/file-upload.html
+						return true;
+					}*/
+                    /**,before_remove : function() {
+						return true;
+					}*/
+                    ,
+                preview_error: function (filename, error_code) {
+                    //name of the file that failed
+                    //error_code values
+                    //1 = 'FILE_LOAD_FAILED',
+                    //2 = 'IMAGE_LOAD_FAILED',
+                    //3 = 'THUMBNAIL_FAILED'
+                    //alert(error_code);
+                }
+
+            }).on('change', function () {
+                //console.log($(this).data('ace_input_files'));
+                //console.log($(this).data('ace_input_method'));
+            });
+
+            $("#article").ajaxForm({
+                // url: 'links.html',
+                // type: 'post',
+                // success: fun
+            })
+        });
+
+        //响应请求回调
+        function fun() {
+
+        }
+    </script>
+    <script>
+        $(function () {
+            $('#logoForm').ajaxForm({
+                beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+                success: complete, // 这是提交后的方法
+                dataType: 'json'
+            });
+
+            function checkForm() {
+
+
+            }
+
+            function complete(data) {
+                if (data.status == 1) {
+                    layer.alert(data.msg, {
+                        icon: 5
+                    }, function (index) {
+                        layer.close(index);
+                        window.location.href = data.url;
+                    });
+
+                } else {
+                    layer.alert(data.msg, {
+                        icon: 6
+                    }, function (index) {
+                        layer.close(index);
+                        window.location.href = data.url;
+                    });
+
+                }
+            }
+
+        });
+    </script>
+</body>
+
+</html>

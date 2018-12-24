@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+    <!--头部-->
+    {include file="public:nav"}
+
+    <div class="main-container ace-save-state" id="main-container">
+        <!--菜单-->
+        <script type="text/javascript">
+            try {
+                ace.settings.loadState('main-container')
+            } catch (e) {}
+        </script>
+
+        {include file="public:left"}
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="{:url('Index/index')}">首页</a>
+                        </li>
+                        <li class="active">添加管理员</li>
+                    </ul><!-- /.breadcrumb -->
+
+                </div>
+
+                <div class="page-content">
+
+                    {include file="public:set"}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <form id="logoForm" class="form-horizontal" action="{:url('User/save')}" method="post" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <div class="widget-box transparent">
+                                                <div class="widget-header widget-header-flat">
+                                                    <h4 class="widget-title"><i class="ace-icon fa fa-leaf green"></i>管理员信息</h4>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label no-padding-right" for="">账号</label>
+                                                            <div class="col-sm-6">
+                                                                <input class="form-control" type="text" name="username"
+                                                                    required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label no-padding-right" for="">密码</label>
+                                                            <div class="col-sm-6">
+                                                                <input class="form-control" type="password" name="pwd" required>
+                                                            </div>
+                                                        </div>
+                                                      
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label no-padding-right" for="">管理员类型</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="form-control" id="fid" name="level" required>
+                                                                    <option value="0">超级管理员</option>
+                                                                    <option value="1">普通管理员</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix form-actions">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button class="btn btn-info" type="submit">
+                                                <i class="ace-icon fa fa-floppy-o bigger-110"></i>
+                                                保存
+                                            </button>
+                                            <a class="btn" href="{:url('User/lister')}">
+                                                <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                返回
+                                            </a>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- PAGE CONTENT BEGINS -->
+                            </div>
+                            <!-- PAGE CONTENT ENDS -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.page-content -->
+            </div>
+        </div><!-- /.main-content -->
+
+      {include file="public:footer"}
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div><!-- /.main-container -->
+
+
+    <script>
+        jQuery(function ($) {
+            $('[data-rel=tooltip]').tooltip();
+
+            $("#hide-option").tooltip({
+                hide: {
+                    effect: "explode",
+                    delay: 250
+                }
+            });
+
+        })
+    </script>
+
+
+    <script>
+        $(function () {
+            $('#thumb').ace_file_input({
+                style: 'well',
+                btn_choose: '封面图',
+                btn_change: null,
+                no_icon: 'ace-icon fa fa-picture-o',
+                droppable: true,
+                thumbnail: 'fit' //large | fit
+                    //,icon_remove:null//set null, to hide remove/reset button
+                    /**,before_change:function(files, dropped) {
+						//Check an example below
+						//or examples/file-upload.html
+						return true;
+					}*/
+                    /**,before_remove : function() {
+						return true;
+					}*/
+                    ,
+                preview_error: function (filename, error_code) {
+                    //name of the file that failed
+                    //error_code values
+                    //1 = 'FILE_LOAD_FAILED',
+                    //2 = 'IMAGE_LOAD_FAILED',
+                    //3 = 'THUMBNAIL_FAILED'
+                    //alert(error_code);
+                }
+
+            }).on('change', function () {
+                //console.log($(this).data('ace_input_files'));
+                //console.log($(this).data('ace_input_method'));
+            });
+
+            $("#article").ajaxForm({
+                // url: 'links.html',
+                // type: 'post',
+                // success: fun
+            })
+        });
+
+        //响应请求回调
+        function fun() {
+
+        }
+    </script>
+    <script>
+        $(function () {
+            $('#logoForm').ajaxForm({
+                beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+                success: complete, // 这是提交后的方法
+                dataType: 'json'
+            });
+
+            function checkForm() {
+               var pwd = $("input[name=pwd]").val();
+               var pwdlen=$.trim(pwd).length;
+               if(pwdlen < 6 || pwdlen > 20 ){
+                   layer.msg("密码长度必须6-20位");return false;
+               }
+
+            }
+
+            function complete(data) {
+                if (data.status == 1) {
+                    layer.alert(data.msg, {
+                        icon: 5
+                    }, function (index) {
+                        layer.close(index);
+                        window.location.href = data.url;
+                    });
+
+                } else {
+                    layer.alert(data.msg, {
+                        icon: 6
+                    }, function (index) {
+                        layer.close(index);
+                        window.location.href = data.url;
+                    });
+
+                }
+            }
+
+        });
+    </script>
+</body>
+
+</html>

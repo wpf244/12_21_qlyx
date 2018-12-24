@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+<!--头部-->
+{include file="public:nav"}
+
+<div class="main-container ace-save-state" id="main-container">
+  <!--菜单-->
+  <script type="text/javascript">
+  try{ace.settings.loadState('main-container')}catch(e){}
+</script>
+
+{include file="public:left"}
+
+  <div class="main-content">
+    <div class="main-content-inner">
+      <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="{:url('Index/index')}">首页</a>
+          </li>
+          <li class="active">管理员列表</li>
+        </ul><!-- /.breadcrumb -->
+
+      </div>
+
+      <div class="page-content">
+        {include file="public:set"}
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="col-sm-10 col-sm-offset-1">
+              <div class="page-header">
+                <div class="row">
+                <div class="col-sm-4">
+                <a class="btn btn-success btn-white btn-bold" href="{:url('User/add')}">
+                  <i class="ace-icon fa fa-plus icon-only"></i>
+                  添加</a>
+                </div>
+                </div>
+              </div>
+              <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+               
+                  <th>ID</th>
+                  <th>账号</th>                  
+                  <th class="hidden-480">账号类型</th>
+                  <th class="hidden-480">最后登录时间</th>
+                  <th class="hidden-480">最后登录IP</th>
+                  <th style="border-right:#ddd solid 1px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="v"}
+                <tr class="ace-thumbnails">
+              
+                  <td><span class="badge badge-grey">{$v.id}</span></td>
+                  <td>{$v.username}</td>
+                  <td>{if condition="$v.level eq 0"}超级管理员{/if}{if condition="$v.level eq 1"}普通管理员{/if}</td>
+                  <td class="hidden-480">{$v.curtime}</td>
+                  <td class="hidden-480">{$v.ip}</td>
+                  <td>
+                    <a class="btn btn-xs btn-info" onclick="change({$v.id})" title="配置权限">
+                      <i class="ace-icon fa fa-gear bigger-120"></i>
+                    </a>
+                    <a class="btn btn-xs btn-info" href="{:url('User/modifys',array('id'=>$v['id']))}" title="修改">
+                      <i class="ace-icon fa fa-pencil bigger-120"></i>
+                    </a>
+                    <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.id})" title="删除">
+                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    </button>
+                  </td>
+                </tr>
+                {/volist}
+                {empty name="list"}<tr><td colspan="11" class="text-center">暂无数据</td></tr>{/empty}
+                </tbody>
+
+              </table>
+             
+            </div>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.page-content -->
+    </div>
+  </div><!-- /.main-content -->
+
+{include file="public:footer"}
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+  <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+</div><!-- /.main-container -->
+
+<script>
+  jQuery(function($) {
+    $('[data-rel=tooltip]').tooltip();
+
+    $( "#hide-option" ).tooltip({
+      hide: {
+        effect: "explode",
+        delay: 250
+      }
+    });
+
+  })
+</script>
+<script type="text/javascript">
+		function dels(id){
+			layer.confirm('你确定删除吗？', {icon: 3}, function(index){
+		    layer.close(index);
+		    $.ajax({
+            type:"post",
+            url:"{:url('User/delete')}",
+              data:{id:id},
+              datatype:"text",
+              success:function(re){
+                if(re == 2){
+                    layer.msg("系统繁忙请稍后再试");
+                    location.href="{:url('User/lister')}";
+                }
+                if(re == 1){
+                  layer.msg("此账号不能删除"); return false;
+                }
+                if(re == 0){
+                  layer.msg("删除成功")
+                  location.href="{:url('User/lister')}";
+                }
+              }
+          })
+		  });
+	    }
+		</script>
+<script>
+function change(id){
+	$.ajax({
+		type:"post",
+		url:"__URL__/change",
+	    data:{id:id},
+	    datatype:"text",
+	    success:function(re){
+	    	 if(re == 2){
+            layer.msg("系统繁忙请稍后再试");
+            location.href="{:url('User/lister')}";
+         }
+         if(re == 0){
+           layer.msg("超级管理员不需要配置权限"); return false;
+         }
+         if(re == 1){
+          location.href="{:url('User/power')}?id="+id;
+         }
+	    }
+	})
+}
+
+</script>
+
+
+  <script>
+  $("#change").click(function(){
+  	$("#sortForm").submit();
+  })
+
+  </script>
+</body>
+</html>
