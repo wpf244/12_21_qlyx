@@ -58,9 +58,9 @@ class Lb extends BaseAdmin{
            $re=db('lb')->where("id=$id")->find();
            if(!is_string(input('image'))){
                $data['image']=uploads("image");
-               $data['thumb']='uploads/thumb/'.uniqid('',true).'.jpg';
-               $image = \think\Image::open(request()->file('image'));
-               $image->thumb(150,150,\think\Image::THUMB_CENTER)->save(ROOT_PATH.'/public/'.$data['thumb']);
+               $data['thumb']='/public/uploads/thumb/'.uniqid('',true).'.jpg';
+               $image = \think\Image::open(ROOT_PATH.$data['image']);
+               $image->thumb(150,150,\think\Image::THUMB_CENTER)->save(ROOT_PATH.$data['thumb']);
               
            }
            
@@ -81,9 +81,9 @@ class Lb extends BaseAdmin{
         }else{
             if(!is_string(input('image'))){
                 $data['image']=uploads("image");
-                $data['thumb']='uploads/thumb/'.uniqid().'.jpg';
-                $image = \think\Image::open(request()->file('image'));
-                $image->thumb(150,150,\think\Image::THUMB_CENTER)->save(ROOT_PATH.'/public/'.$data['thumb']);
+                $data['thumb']='/public/uploads/thumb/'.uniqid().'.jpg';
+                $image = \think\Image::open(ROOT_PATH.$data['image']);
+                $image->thumb(150,150,\think\Image::THUMB_CENTER)->save(ROOT_PATH.$data['thumb']);
             }
             if(input('status')){
                 $data['status']=1;

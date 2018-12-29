@@ -35,26 +35,48 @@
               <div class="page-header">
                 <div class="row">
                 <div class="col-sm-4">
-                <a class="btn btn-success btn-white btn-bold" href="{:url('Member/add')}">
-                  <i class="ace-icon fa fa-plus icon-only"></i>
-                  添加</a>
                 </div>
+                <div class="col-sm-8 clearfix">
+                    <form class="form-inline pull-right" action="{:url('Member/lister')}" method="POST">
+                      <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-th-list"></i>
+                              </span>
+                          <input type="text" name="phone" id="phone" class="form-control search-query" value="{$phone}"
+                            placeholder="需查询的会员手机号">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="ace-icon fa fa-check"></i>
+                          </span>
+                          <input type="text" name="username" id="username" class="form-control search-query" value="{$username}" placeholder="需查询的会员昵称">
+                          <span class="input-group-btn">
+                            <button type="submit" class="btn btn-info btn-sm ajax-search-form">
+                              <span class="ace-icon fa fa-search icon-on-right bigger-120"></span> 搜索
+                            </button>
+                          </span>
+                          <span class="input-group-btn">
+                            <a class="btn btn-info btn-sm ajax-search-form" href="{:url('Member/lister')}">
+                              还原
+                            </a>
+                          </span>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
               <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>会员编号</th>                  
-                  <th class="hidden-480">会员名</th>
-                  <th class="hidden-480">级别</th>
+                  <th>会员昵称</th>                  
                   <th class="hidden-480">手机号码</th>
-                  <th class="hidden-480">微信号</th>
-                  <th class="hidden-480">支付宝号</th>
-                  <th class="hidden-480">推荐人</th>
+                  <th class="hidden-480">能量币</th>
                   <th class="hidden-480">注册时间</th>
-                  <th class="hidden-480">是否激活</th>
-                  <th class="hidden-480">激活时间</th>
                   <th style="border-right:#ddd solid 1px;">操作</th>
                 </tr>
                 </thead>
@@ -63,27 +85,20 @@
                 <tr class="ace-thumbnails">
               
                   <td><span class="badge badge-grey">{$v.uid}</span></td>
-                  <td>{$v.u_code}</td>
-                  <td>{$v.u_name}</td>
-                  <td>{$v.level}</td>
-                  <td class="hidden-480">{$v.u_phone}</td>
-                  <td class="hidden-480">{$v.u_wx}</td>
-                  <td class="hidden-480">{$v.u_alipay}</td>
-                  <?php $pid=$v['pid']; $user=db("user")->where("uid=$pid")->find();?>
-                  <td class="hidden-480">{$user['u_name']}</td>
-                  <td class="hidden-480">{$v.u_ztime|date="Y-m-d H:i:s",###}</td>
+                  <td>{$v.username}</td>
+                  <td>{$v.phone}</td>
+                  <td id="money{$v.uid}">{$v.money}</td>
+                  <td class="hidden-480">{$v.time|date="Y-m-d H:i:s",###}</td>
                   <td>
-                     <div onclick="change({$v.uid},{$v.u_status})"> {if condition="$v.u_status eq 1" }<a  class="btn btn-xs btn-info">是</a> {else /} <a class="btn btn-xs btn-danger">否</a>{/if}</div>
-                  </td>
-                  <td class="hidden-480">{if condition="$v.u_jtime neq '' "}{$v.u_jtime|date="Y-m-d H:i:s",###}{/if}</td>
-                  <td>
-                    
-                    <a class="btn btn-xs btn-info" href="{:url('Member/modifys',array('id'=>$v['uid']))}" title="修改">
-                      <i class="ace-icon fa fa-pencil bigger-120"></i>
-                    </a>
-                    <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.uid})" title="删除">
-                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    <button class="btn btn-xs btn-info" onclick="recharge({$v.uid})" title="充值">
+                      <i class="glyphicon glyphicon-usd"></i><!-- 充值 -->
                     </button>
+                    <!-- <a class="btn btn-xs btn-info" href="{:url('Member/modifys',array('id'=>$v['uid']))}" title="修改">
+                      <i class="ace-icon fa fa-pencil bigger-120"></i>
+                    </a> -->
+                    <!-- <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.uid})" title="删除">
+                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    </button> -->
                   </td>
                 </tr>
                 {/volist}
@@ -110,6 +125,22 @@
 </a>
 </div><!-- /.main-container -->
 
+<div class="modal fade" id="recharge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">充值</h4>
+            </div>
+            <div class="modal-body">
+              充值能量币：<input type="number" name="recharge" id="recharge_number" placeholder="请输入充值能量币数量">
+              <input type="hidden" name="user_id" id="user_id">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="recharge_submit()">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
 
 <script>
   jQuery(function($) {
@@ -149,53 +180,38 @@
 	    }
 		</script>
 <script>
-function change(id,status){
- if(status == 0){
-	layer.confirm('你确定激活此会员吗？', {icon: 3}, function(index){
-		    layer.close(index);
-		    $.ajax({
-            type:"post",
-            url:"{:url('Member/change')}",
-              data:{id:id},
-              datatype:"text",
-              success:function(re){
-                if(re == 2 || re==0){
-                    layer.msg("系统繁忙请稍后再试");
-                    location.href="{:url('Member/lister')}";
-                }
-                
-                if(re == 1){
-                  layer.msg("激活成功")
-                  location.href="{:url('Member/lister')}";
-                }
-              }
-          })
-		  });
- }else{
-  layer.confirm('你确定关闭此会员吗？', {icon: 3}, function(index){
-		    layer.close(index);
-		    $.ajax({
-            type:"post",
-            url:"{:url('Member/changes')}",
-              data:{id:id},
-              datatype:"text",
-              success:function(re){
-                if(re == 2 || re==0){
-                    layer.msg("系统繁忙请稍后再试");
-                    location.href="{:url('Member/lister')}";
-                }
-                
-                if(re == 1){
-                  layer.msg("关闭成功")
-                  location.href="{:url('Member/lister')}";
-                }
-              }
-          })
-		  });
- } 
-
+function recharge(id){
+  event.preventDefault();
+  var recharge = $('#recharge');
+  $("#user_id").val(id);
+  $('#recharge').modal('show');
 }
 
+function recharge_submit(){
+  event.preventDefault();
+  var recharge_number = $("#recharge_number").val();
+  if(recharge_number <= 0){
+    layer.msg('请输入正确充值能量币数量！');
+    return;
+  }
+  var user_id = $("#user_id").val();
+  if(user_id == 0){
+    layer.msg('未选择会员!');
+    return;
+  }
+  $.ajax({
+    url: "{:url('member/recharge_money')}",
+    type: 'post',
+    data: {money: recharge_number, uid: user_id},
+    success: function(data){
+      layer.msg(data.msg);
+      if(data.error_code == 1){
+        var old_money = parseInt($("#money"+user_id).html());
+        $("#money" + user_id).html(old_money + parseInt(data.data));
+      }
+    }
+  })
+}
 </script>
 
 

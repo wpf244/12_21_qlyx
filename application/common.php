@@ -31,9 +31,7 @@ function uploads($image){
     $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
     $pa=$info->getSaveName();
     $path=str_replace("\\", "/", $pa);
-    $paths='/uploads/'.$path;
-    $images=\think\Image::open(ROOT_PATH.'/public'.$paths);
-    $images->save(ROOT_PATH.'/public'.$paths,null,60,true);
+    $paths='/public/uploads/'.$path;
 
     return $paths;
 }

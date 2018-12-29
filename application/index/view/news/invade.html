@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    {include file="public:header"}
+  <body>
+    <div data-role="page" id="invade" data-theme="c">
+      <div class="ui-content" data-role="main" data-theme="c">
+        <div class="notice">欢迎各位入侵者寻找宿主！</div>
+        <div class="venom"></div>
+        <div class="action"><a class="user" href="{:url('User/index')}" data-ajax="false"></a><a class="video" href="{:url('News/video')}" data-ajax="false"></a>
+        </div>
+        <div class="invadeinfo" style="color:aliceblue;">
+          <span>当前入侵序号:{$queue.queue_id}</span>
+          <?php $number = $last_queue['queue_id']%12 == 0 ? 1 : 13-$last_queue['queue_id']%12; ?>
+					<br>
+          <span>本轮入侵还有{$number}位</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

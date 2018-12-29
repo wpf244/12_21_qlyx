@@ -15,11 +15,11 @@ return [
     // 服务器地址
     'hostname'        => '127.0.0.1',
     // 数据库名
-    'database'        => '12_22_qlyx',
+    'database'        => 'duye_dd371_com',
     // 用户名
-    'username'        => 'root',
+    'username'        => 'duye_dd371_com',
     // 密码
-    'password'        => 'root',
+    'password'        => 'bd7F2yxRSWGrTMZC',
     // 端口
     'hostport'        => '3306',
     // 连接dsn

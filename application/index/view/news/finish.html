@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    {include file="public:header"}
+  <body>
+    <div data-role="page" id="finish" data-theme="c">
+      <div class="ui-content" data-role="main" data-theme="c">
+        <div class="endText">
+          <h2 class="title">恭喜！您已成功入侵宿主！</h2>
+          <div class="flex">
+            <p>开始:{$detail.start_time|date="Y-m-d H:i:s",###}</p>
+            <p>结束:{$detail.end_time|date="Y-m-d H:i:s",###}</p>
+          </div>
+          <p>入侵成功后您将获得能量值:1000!可直接点击”提现”按钮进行兑换，也可到个人中心进行统一兑换.点击“下一局”按钮，您可重新选择入侵，寻找宿主！</p>
+        </div><a class="pb nextBtn" href="{:url('News/index')}" data-role="none" data-ajax="false"></a>
+      </div>
+      <div class="finishBg"></div>
+    </div>
+  </body>
+</html>

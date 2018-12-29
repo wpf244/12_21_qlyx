@@ -1,20 +1,141 @@
 <?php
 namespace app\admin\controller;
 
+use think\Request;
+
 class Member extends BaseAdmin
 {
     public function lister()
     {
-        $list=db("user")->order("uid desc")->paginate(10);
+        $phone = Request::instance()->param('phone', '');
+        $username = Request::instance()->param('username', '');
+        $map=[];
+        if($phone){
+            $map['phone']=array("like",'%'.$phone.'%');
+        }
+        if($username){
+            $map['username']=array("like",'%'.$username.'%');
+        }
+        $list=db("user")->where($map)->order("uid desc")->paginate(20,false,['query'=>request()->param()]);
         $this->assign("list",$list);
       
         $page=$list->render();
         $this->assign("page",$page);   
-
-      
+        $this->assign('phone', $phone);
+        $this->assign('username', $username);
 
         return $this->fetch();
     }
+
+    /**
+     * 充值能量币
+     *
+     * @return void
+     */
+    public function recharge_money()
+    {
+        $money = Request::instance()->param('money', 0);
+        $uid = Request::instance()->param('uid');
+        $res = db('user')->where("uid=$uid")->setInc('money', $money);
+        if($res){
+            return array('error_code'=>1, 'data'=>$money, 'msg'=>'充值成功!');
+        }else{
+            return array('error_code'=>-1, 'data'=>$money, 'msg'=>'充值失败!');
+        }
+    }
+
+    /**
+     * 提现列表
+     *
+     * @return void
+     */
+    public function withdraw(){
+        $status = Request::instance()->param('status', '-1');
+        $start = Request::instance()->param('start', '');
+        $end = Request::instance()->param('end', '');
+        $map = [];
+        if($status != -1){
+            $map['status'] = $status;
+        }
+        if($start != '' && $end != ''){
+            $map['create_time'] = array(array('egt',strtotime($start)),array('elt',strtotime($end.' 23:55:55')),'AND');
+        }elseif($start == '' && $end != ''){
+            $map['create_time'] = array('elt',strtotime($end.' 23:55:55'));
+        }elseif($start != '' && $end == ''){
+            $map['create_time'] = array('egt',strtotime($start));
+        }
+        $list = db("withdraw")->alias('w')->where($map)->join('ddsc_user u', 'u.uid=w.uid')->order("status asc")->order('create_time desc')->paginate(10,false,['query'=>request()->param()]);
+        $this->assign('list', $list);
+        $this->assign('status', $status);
+        $this->assign('start', $start);
+        $this->assign('end', $end);
+        return $this->fetch('withdraw');
+    }
+
+    /**
+     * 提现状态修改
+     *
+     * @return void
+     */
+    public function withdraw_pass(){
+        $id = Request::instance()->param('id');
+        $ftype = Request::instance()->param('ftype');
+        db('withdraw')->where('id', $id)->setField('status', $ftype);
+        $withdraw = db('withdraw')->where('id', $id)->find();
+        if($ftype == 1){
+            db('withdraw')->where('id', $id)->setField('audit_time',time());
+        }elseif($ftype == 2){
+            db('withdraw')->where('id', $id)->setField('over_time',time());
+        }elseif($ftype == 3){
+            //驳回，返回余额
+            db('withdraw')->where('id', $id)->setField('over_time',time());
+            if(!$withdraw['audit_time']){
+                db('withdraw')->where('id', $id)->setField('audit_time',time());
+            }
+            db('user')->where('uid', $withdraw['uid'])->setInc('money', $withdraw['number']);
+        }
+    }
+
+    /**
+     * 充值记录
+     *
+     * @return void
+     */
+    public function recharge(){
+        $status = Request::instance()->param('status', '-1');
+        $start = Request::instance()->param('start', '');
+        $end = Request::instance()->param('end', '');
+        $map = [];
+        if($status != -1){
+            $map['status'] = $status;
+        }
+        if($start != '' && $end != ''){
+            $map['create_time'] = array(array('egt',strtotime($start)),array('elt',strtotime($end.' 23:55:55')),'AND');
+        }elseif($start == '' && $end != ''){
+            $map['create_time'] = array('elt',strtotime($end.' 23:55:55'));
+        }elseif($start != '' && $end == ''){
+            $map['create_time'] = array('egt',strtotime($start));
+        }
+        $list = db("recharge")->alias('r')->where($map)->where('status=1')->join('ddsc_user u', 'u.uid=r.uid')->order("status asc")->order('create_time desc')->paginate(10,false,['query'=>request()->param()]);
+        $this->assign('list', $list);
+        $this->assign('status', $status);
+        $this->assign('start', $start);
+        $this->assign('end', $end);
+        return $this->fetch("recharge");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function change()
     {
         $id=input('id');

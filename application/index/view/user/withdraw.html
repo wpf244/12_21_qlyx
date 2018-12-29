@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    {include file="public:header"}
+  <body>
+    <div class="user" data-role="page" id="deposit" data-theme="c">
+      <div class="ui-content" data-role="main" data-theme="c">
+        <div class="header">我要提现<a class="back" href="#" data-rel="back"></a></div>
+        <div style="margin-top:20px;">
+            <label for="bank"></label>
+            <input id="bank" type="text" name="bank" data-theme="c" data-clear-btn="true" placeholder="请输入开户银行" required>
+            <label for="num"></label>
+            <input id="num" type="number" name="card" data-theme="c" data-clear-btn="true" placeholder="请输入银行卡号" required>
+            <label for="money"></label>
+            <input id="money" type="number" name="number" data-theme="c" data-clear-btn="true" placeholder="请输入提现金额" required>
+            <div class="pb">
+              <p class="text-center" style="font-size: 12px;">手续费为{$reb2.name}%,{$reb.name}</p>
+              <button class="btn" id="btn" type="submit" data-theme="c">提交</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script>
+    $("#btn").click(function(){
+        var bank=$.trim($("input[name=bank]").val());
+        var card=$.trim($("input[name=card]").val());
+        var number=$.trim($("input[name=number]").val());
+        if(bank == ''){
+            layer.msg("请输入开户银行!");
+            return false;
+        }
+        if(card == ''){
+            layer.msg("请输入银行卡号!");
+            return false;
+        }
+        if(number == ''){
+            layer.msg("请输入提现金额!");
+            return false;
+        }
+        if(parseInt(number) <= 0){
+            layer.msg("输入的金额不能为负数或0!");
+            return false;
+        }
+        if(parseInt(number)%100 != 0){
+            layer.msg("输入的金额只能是100或100的倍数!");
+            return false;
+        }
+        $.ajax({
+            type:"post",
+            url:"{:url('User/withdraw_save')}",
+            data:{bank: bank, card: card, number: number},
+            dataType:"text",
+            success:function(re){
+                if(re == 0){
+                    layer.msg("提现成功");
+                }
+                if(re == 1){
+                    location.href="{:url('Login/out')}";
+                }
+                if(re == 2){
+                    layer.msg("系统错误，请稍后再试");
+                }
+                if(re == 3){
+                    layer.msg("提现能量币超出持有能量币");
+                }
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+                
+            }
+        })
+    })
+    </script>  
+  </body>
+</html>

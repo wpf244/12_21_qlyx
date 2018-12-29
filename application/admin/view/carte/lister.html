@@ -72,14 +72,14 @@
                         <td class="ace-thumbnails hidden-480">{$v.c_modul}</td>
                         <td class="ace-thumbnails hidden-480">{$v.c_icon}</td>
                         <td class="ace-thumbnails hidden-480"><input type="number" class="sort input-common input-common-sort" fieldid="{$v['cid']}" fieldname="c_sort" value="{$v['c_sort']}" size="1"></td>
-                        <td>
+                        <!-- <td>
                           <a class="btn btn-xs btn-info" href="{:url('Carte/modifys',array('id'=>$v.cid))}" title="修改信息">
                             <i class="ace-icon fa fa-pencil bigger-120"></i>
                           </a>
                           <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.cid})" title="删除">
                             <i class="ace-icon fa fa-trash-o bigger-120"></i>
                           </button>
-                        </td> 
+                        </td>  -->
                       </tr>
                         {volist name="$v['lists']" id="p"}
                             
@@ -90,14 +90,14 @@
                                 <td class="ace-thumbnails hidden-480">&nbsp&nbsp&nbsp&nbsp|--{$p.c_modul}</td>
                                 <td class="ace-thumbnails hidden-480"></td>
                                 <td class="ace-thumbnails hidden-480"><input type="number" class="sort input-common input-common-sort" fieldid="{$v['cid']}" fieldname="c_sort" value="{$v['c_sort']}" size="1"></td>
-                                 <td>
+                                 <!-- <td>
                                     <a class="btn btn-xs btn-info" href="{:url('Carte/modifys',array('id'=>$p['cid']))}" title="修改信息">
                                     <i class="ace-icon fa fa-pencil bigger-120"></i>
                                     </a>
                                     <button class="btn btn-xs btn-danger" type="button" onclick="dels({$p['cid']})" title="删除">
                                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                     </button>
-                                </td> 
+                                </td>  -->
                             </tr>
                             
                         {/volist}

@@ -7,7 +7,7 @@ class Login extends Common
 {
     public function login()
     {
-        return $this->fetch();
+        return view('login');
     }
     public function register()
     {
@@ -136,7 +136,7 @@ class Login extends Common
             session('userid',$re['uid']);
             $this->success('登陆成功 ^_^',url('News/index'));
          }else{
-             $this->error('登录失败：用户名或密码错误。',url('Login/index'));
+             $this->error('登录失败：用户名或密码错误。',url('Login/login'));
          }
      }
      public function out(){

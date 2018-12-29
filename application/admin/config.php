@@ -2,6 +2,6 @@
 return [
     'view_replace_str'=>[
 
-        '__ADMIN__'         => '/static/admin',
+        '__ADMIN__'         => '/public/static/admin',
     ]
 ];

@@ -9,7 +9,7 @@
           <div class="info text-center">
             <h2>{$re.username}</h2>
             <p>剩余能量: {$re.money}</p>
-            <div class="flex useraction"><a href="toup.html">我要充值</a><a href="deposit.html">我要提现</a></div>
+            <div class="flex useraction"><a href="{:url('User/recharge_change')}" data-ajax="false">我要充值</a><a href="{:url('User/withdraw')}" data-ajax="false">我要提现</a></div>
           </div>
           <ul class="nostyle menulist">
             <li class="changeName target" data-mymodal="#changename"> <a href="###">昵称修改</a></li>

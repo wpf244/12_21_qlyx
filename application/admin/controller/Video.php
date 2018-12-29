@@ -23,9 +23,9 @@ class Video extends BaseAdmin
         $data=\input("post.");
         if(!is_string(input('image'))){
             $data['image']=uploads('image');
-            $data['thumb']='uploads/thumb/'.uniqid('',true).'.jpg';
-            $image = \think\Image::open(request()->file('image'));
-            $image->thumb(148,80,\think\Image::THUMB_CENTER)->save(ROOT_PATH.'/public/'.$data['thumb']);
+            $data['thumb']='/public/uploads/thumb/'.uniqid('',true).'.jpg';
+            $image = \think\Image::open(ROOT_PATH.$data['image']);
+            $image->thumb(148,80,\think\Image::THUMB_CENTER)->save(ROOT_PATH.$data['thumb']);
         }      
         $data['time']=time();
         $re=db("video")->insert($data);
@@ -68,9 +68,9 @@ class Video extends BaseAdmin
             $data=input('post.');
             if(!is_string(input('image'))){
                 $data['image']=uploads('image');
-                $data['thumb']='uploads/thumb/'.uniqid('',true).'.jpg';
-                $image = \think\Image::open(request()->file('image'));
-                $image->thumb(148,80,\think\Image::THUMB_CENTER)->save(ROOT_PATH.'/public/'.$data['thumb']);
+                $data['thumb']='/public/uploads/thumb/'.uniqid('',true).'.jpg';
+                $image = \think\Image::open(ROOT_PATH.$data['image']);
+                $image->thumb(148,80,\think\Image::THUMB_CENTER)->save(ROOT_PATH.$data['thumb']);
                 
             }else{
                 $data['image']=$re['image'];
