@@ -8,7 +8,7 @@ use think\Loader;
 
 Loader::import('dypay.bankpay', EXTEND_PATH);
 
-class Pay extends BaseHome{
+class Pay extends Controller{
     
     public function recharge(){
         header('Content-Type:textml;charset=GB2312');

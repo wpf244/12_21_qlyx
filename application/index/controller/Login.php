@@ -75,7 +75,7 @@ class Login extends Common
         
                         $rea=db("user")->insert($data);
                         if($rea){
-                            $this->success("注册成功",url('login'));
+                            $this->success("注册成功",url('User/recharge_change'));
                         }else{
                             $this->success("注册失败",url('register'));
                         }
@@ -134,7 +134,12 @@ class Login extends Common
          $re=db("user")->where(array('phone'=>$u_name,'pwd'=>$pwd))->find();
          if($re){
             session('userid',$re['uid']);
-            $this->success('登陆成功 ^_^',url('News/index'));
+            if($re['status'] != 1){
+                $this->success('登陆成功 ^_^',url('User/recharge_change'));
+            }else{
+                $this->success('登陆成功 ^_^',url('News/index'));
+            }
+            
          }else{
              $this->error('登录失败：用户名或密码错误。',url('Login/login'));
          }

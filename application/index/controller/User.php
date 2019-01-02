@@ -12,7 +12,9 @@ class User extends BaseHome
         $re=db("user")->where("uid=$uid")->find();
         if($re){
             $this->assign("re",$re);
-            
+            if($re['status'] != 1){
+                $this->redirect("User/recharge_change");
+            }
             return $this->fetch();
         }else{
             $this->redirect("Login/out");
@@ -23,6 +25,9 @@ class User extends BaseHome
         $uid=session("userid");
         $re=db("user")->where("uid=$uid")->find();
         if($re){
+            if($re['status'] != 1){
+                $this->redirect("User/recharge_change");
+            }
             $data['username']=input('username');
             $res=db("user")->where("uid=$uid")->update($data);
             echo '0';
@@ -37,6 +42,12 @@ class User extends BaseHome
      * @return void
      */
     public function withdraw(){
+        $re=db("user")->where("uid=$uid")->find();
+        if($re){
+            if($re['status'] != 1){
+                $this->redirect("User/recharge_change");
+            }
+        }
         $reb=db("lb")->where("fid=2")->find();
         $this->assign("reb",$reb);
         $reb=db("lb")->where("fid=3")->find();
@@ -53,6 +64,9 @@ class User extends BaseHome
         $uid=session("userid");
         $re=db("user")->where("uid=$uid")->find();
         if($re){
+            if($re['status'] != 1){
+                $this->redirect("User/recharge_change");
+            }
             //获取参数
             $bank = Request::instance()->param('bank', '');
             $card = Request::instance()->param('card', '');
