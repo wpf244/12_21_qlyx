@@ -1,63 +1,63 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-  {include file="public:header"}
-  <body>
-    <div class="loginPage" data-role="page" id="login" data-theme="c">
-      <div class="shade"></div>
-      <div class="ui-content" data-role="main" data-theme="c">
-        <form id="logoForm" action="{:url('Login/check')}" method="POST">
-          <label for="loginphone"></label>
-          <input id="loginphone" type="text" data-theme="c" name="phone" data-clear-btn="true" placeholder="请输入手机号码" maxlength="11" required>
-          <label for="loginpassword"></label>
-          <input id="loginpassword" type="password" data-theme="c" name="pwd" data-clear-btn="true" placeholder="请输入密码" required>
-          <div class="flex text12 mb-30"><a data-ajax="false" href="{:url('Login/forget')}">忘记密码?</a><a class="noneline arrow" data-ajax="false" href="{:url('Login/register')}">快速注册</a></div>
-          <button class="btn" type="submit" data-role="button" data-theme="c">登录</button>
-        </form>
-      </div>
-    </div>
-
-    <script>
-      $(function () {
-        $('#logoForm').ajaxForm({
-          beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
-          success: complete, // 这是提交后的方法
-          dataType: 'json'
-        });
-    
-        function checkForm() {
-          var phone = $.trim($("input[name=phone]").val());
-          var telReg = !!phone.match(/^(0|86|17951)?(13|15|17|18|14|16|19)[0-9]{9}$/);
-          if(telReg == false){
-            layer.msg("请输入正确的手机号码!");return false;
-          }
-        
-            var pwdl = $.trim($("input[name=pwd]").val()).length;;
-            if(pwdl < 6 || pwdl >20){
-              layer.msg("请输入6-20位登录密码!");return false;
-            }
-      
-          
-        }
-    
-        function complete(data) {
-          if (data.code == 1) {
-            
-              window.location.href = data.url;
-           
-    
-          } else {
-            layer.alert(data.msg, {
-              icon: 5
-            }, function (index) {
-              layer.close(index);
-              window.location.href = data.url;
-            });
-    
-          }
-        }
-    
-      });
-    </script>
-
-  </body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+  {include file="public:header"}
+  <body>
+    <div class="loginPage" data-role="page" id="login" data-theme="c">
+      <div class="shade"></div>
+      <div class="ui-content" data-role="main" data-theme="c">
+        <form id="logoForm" action="{:url('Login/check')}" method="POST">
+          <label for="loginphone"></label>
+          <input id="loginphone" type="text" data-theme="c" name="phone" data-clear-btn="true" placeholder="请输入手机号码" maxlength="11" required>
+          <label for="loginpassword"></label>
+          <input id="loginpassword" type="password" data-theme="c" name="pwd" data-clear-btn="true" placeholder="请输入密码" required>
+          <div class="flex text12 mb-30"><a data-ajax="false" href="{:url('Login/forget')}">忘记密码?</a><a class="noneline arrow" data-ajax="false" href="{:url('Login/register')}">快速注册</a></div>
+          <button class="btn" type="submit" data-role="button" data-theme="c">登录</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      $(function () {
+        $('#logoForm').ajaxForm({
+          beforeSubmit: checkForm, // 此方法主要是提交前执行的方法，根据需要设置
+          success: complete, // 这是提交后的方法
+          dataType: 'json'
+        });
+    
+        function checkForm() {
+          var phone = $.trim($("input[name=phone]").val());
+          var telReg = !!phone.match(/^(0|86|17951)?(13|15|17|18|14|16|19)[0-9]{9}$/);
+          if(telReg == false){
+            layer.msg("请输入正确的手机号码!");return false;
+          }
+        
+            var pwdl = $.trim($("input[name=pwd]").val()).length;;
+            if(pwdl < 6 || pwdl >20){
+              layer.msg("请输入6-20位登录密码!");return false;
+            }
+      
+          
+        }
+    
+        function complete(data) {
+          if (data.code == 1) {
+            
+              window.location.href = data.url;
+           
+    
+          } else {
+            layer.alert(data.msg, {
+              icon: 5
+            }, function (index) {
+              layer.close(index);
+              window.location.href = data.url;
+            });
+    
+          }
+        }
+    
+      });
+    </script>
+
+  </body>
 </html>

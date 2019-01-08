@@ -1,225 +1,249 @@
-<!DOCTYPE html>
-<html>
-{include file="public:header"}
-
-<body class="no-skin">
-<!--头部-->
-{include file="public:nav"}
-
-<div class="main-container ace-save-state" id="main-container">
-  <!--菜单-->
-  <script type="text/javascript">
-  try{ace.settings.loadState('main-container')}catch(e){}
-</script>
-
-{include file="public:left"}
-
-  <div class="main-content">
-    <div class="main-content-inner">
-      <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-        <ul class="breadcrumb">
-          <li>
-            <i class="ace-icon fa fa-home home-icon"></i>
-            <a href="{:url('Index/index')}">首页</a>
-          </li>
-          <li class="active">会员列表</li>
-        </ul><!-- /.breadcrumb -->
-
-      </div>
-
-      <div class="page-content">
-        {include file="public:set"}
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="col-sm-10 col-sm-offset-1">
-              <div class="page-header">
-                <div class="row">
-                <div class="col-sm-4">
-                </div>
-                <div class="col-sm-8 clearfix">
-                    <form class="form-inline pull-right" action="{:url('Member/lister')}" method="POST">
-                      <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-th-list"></i>
-                              </span>
-                          <input type="text" name="phone" id="phone" class="form-control search-query" value="{$phone}"
-                            placeholder="需查询的会员手机号">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="input-group">
-                          <span class="input-group-addon">
-                            <i class="ace-icon fa fa-check"></i>
-                          </span>
-                          <input type="text" name="username" id="username" class="form-control search-query" value="{$username}" placeholder="需查询的会员昵称">
-                          <span class="input-group-btn">
-                            <button type="submit" class="btn btn-info btn-sm ajax-search-form">
-                              <span class="ace-icon fa fa-search icon-on-right bigger-120"></span> 搜索
-                            </button>
-                          </span>
-                          <span class="input-group-btn">
-                            <a class="btn btn-info btn-sm ajax-search-form" href="{:url('Member/lister')}">
-                              还原
-                            </a>
-                          </span>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>会员昵称</th>                  
-                  <th class="hidden-480">手机号码</th>
-                  <th class="hidden-480">能量币</th>
-                  <th class="hidden-480">注册时间</th>
-                  <th style="border-right:#ddd solid 1px;">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {volist name="list" id="v"}
-                <tr class="ace-thumbnails">
-              
-                  <td><span class="badge badge-grey">{$v.uid}</span></td>
-                  <td>{$v.username}</td>
-                  <td>{$v.phone}</td>
-                  <td id="money{$v.uid}">{$v.money}</td>
-                  <td class="hidden-480">{$v.time|date="Y-m-d H:i:s",###}</td>
-                  <td>
-                    <button class="btn btn-xs btn-info" onclick="recharge({$v.uid})" title="充值">
-                      <i class="glyphicon glyphicon-usd"></i><!-- 充值 -->
-                    </button>
-                    <!-- <a class="btn btn-xs btn-info" href="{:url('Member/modifys',array('id'=>$v['uid']))}" title="修改">
-                      <i class="ace-icon fa fa-pencil bigger-120"></i>
-                    </a> -->
-                    <!-- <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.uid})" title="删除">
-                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                    </button> -->
-                  </td>
-                </tr>
-                {/volist}
-                {empty name="list"}<tr><td colspan="11" class="text-center">暂无数据</td></tr>{/empty}
-                </tbody>
-
-              </table>
-              <div class="text-center">
-                <ul class="pagination" id="result">
-                  {$page}
-                </ul>
-              </div>
-            </div>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.page-content -->
-    </div>
-  </div><!-- /.main-content -->
-
-{include file="public:footer"}
-
-<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-  <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-</a>
-</div><!-- /.main-container -->
-
-<div class="modal fade" id="recharge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">充值</h4>
-            </div>
-            <div class="modal-body">
-              充值能量币：<input type="number" name="recharge" id="recharge_number" placeholder="请输入充值能量币数量">
-              <input type="hidden" name="user_id" id="user_id">
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="recharge_submit()">提交</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div>
-
-<script>
-  jQuery(function($) {
-    $('[data-rel=tooltip]').tooltip();
-
-    $( "#hide-option" ).tooltip({
-      hide: {
-        effect: "explode",
-        delay: 250
-      }
-    });
-
-  })
-</script>
-<script type="text/javascript">
-		function dels(id){
-			layer.confirm('你确定删除此会员吗？', {icon: 3}, function(index){
-		    layer.close(index);
-		    $.ajax({
-            type:"post",
-            url:"{:url('Member/delete')}",
-              data:{id:id},
-              datatype:"text",
-              success:function(re){
-                if(re == 2 || re==1){
-                    layer.msg("系统繁忙请稍后再试");
-                    location.href="{:url('Member/lister')}";
-                }
-                
-                if(re == 0){
-                  layer.msg("删除成功")
-                  location.href="{:url('Member/lister')}";
-                }
-              }
-          })
-		  });
-	    }
-		</script>
-<script>
-function recharge(id){
-  event.preventDefault();
-  var recharge = $('#recharge');
-  $("#user_id").val(id);
-  $('#recharge').modal('show');
-}
-
-function recharge_submit(){
-  event.preventDefault();
-  var recharge_number = $("#recharge_number").val();
-  if(recharge_number <= 0){
-    layer.msg('请输入正确充值能量币数量！');
-    return;
-  }
-  var user_id = $("#user_id").val();
-  if(user_id == 0){
-    layer.msg('未选择会员!');
-    return;
-  }
-  $.ajax({
-    url: "{:url('member/recharge_money')}",
-    type: 'post',
-    data: {money: recharge_number, uid: user_id},
-    success: function(data){
-      layer.msg(data.msg);
-      if(data.error_code == 1){
-        var old_money = parseInt($("#money"+user_id).html());
-        $("#money" + user_id).html(old_money + parseInt(data.data));
-      }
-    }
-  })
-}
-</script>
-
-
-  <script>
-  $("#change").click(function(){
-  	$("#sortForm").submit();
-  })
-
-  </script>
-</body>
-</html>
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+<!--头部-->
+{include file="public:nav"}
+
+<div class="main-container ace-save-state" id="main-container">
+  <!--菜单-->
+  <script type="text/javascript">
+  try{ace.settings.loadState('main-container')}catch(e){}
+</script>
+
+{include file="public:left"}
+
+  <div class="main-content">
+    <div class="main-content-inner">
+      <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+        <ul class="breadcrumb">
+          <li>
+            <i class="ace-icon fa fa-home home-icon"></i>
+            <a href="{:url('Index/index')}">首页</a>
+          </li>
+          <li class="active">会员列表</li>
+        </ul><!-- /.breadcrumb -->
+
+      </div>
+
+      <div class="page-content">
+        {include file="public:set"}
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="col-sm-10 col-sm-offset-1">
+              <div class="page-header">
+                <div class="row">
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-8 clearfix">
+                    <form class="form-inline pull-right" action="{:url('Member/lister')}" method="POST">
+                      <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-th-list"></i>
+                              </span>
+                          <input type="text" name="phone" id="phone" class="form-control search-query" value="{$phone}"
+                            placeholder="需查询的会员手机号">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <i class="ace-icon fa fa-check"></i>
+                          </span>
+                          <input type="text" name="username" id="username" class="form-control search-query" value="{$username}" placeholder="需查询的会员昵称">
+                          <span class="input-group-btn">
+                            <button type="submit" class="btn btn-info btn-sm ajax-search-form">
+                              <span class="ace-icon fa fa-search icon-on-right bigger-120"></span> 搜索
+                            </button>
+                          </span>
+                          <span class="input-group-btn">
+                            <a class="btn btn-info btn-sm ajax-search-form" href="{:url('Member/lister')}">
+                              还原
+                            </a>
+                          </span>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>会员昵称</th>                  
+                  <th class="hidden-480">手机号码</th>
+                  <th class="hidden-480">能量币</th>
+                  <th class="hidden-480">注册时间</th>
+                  <th class="hidden-480">状态</th>
+                  <th style="border-right:#ddd solid 1px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="v"}
+                <tr class="ace-thumbnails">
+              
+                  <td><span class="badge badge-grey">{$v.uid}</span></td>
+                  <td>{$v.username}</td>
+                  <td>{$v.phone}</td>
+                  <td id="money{$v.uid}">{$v.money}</td>
+                  <td class="hidden-480">{$v.time|date="Y-m-d H:i:s",###}</td>
+                  <td class="hidden-480" id="tdstatus{$v.uid}">
+                    {if condition="$v.status == 1"}普通会员{else /}未充值{/if}
+                  </td>
+                  <td>
+                    <button class="btn btn-xs btn-info" onclick="recharge({$v.uid})" title="充值">
+                      充值
+                    </button>
+                    {if condition="$v.status != 1"}
+                    <button class="btn btn-xs btn-info" id="status{$v.uid}" onclick="status({$v.uid})" title="激活" style="">
+                      激活
+                    </button>
+                    {/if}
+                    <!-- <a class="btn btn-xs btn-info" href="{:url('Member/modifys',array('id'=>$v['uid']))}" title="修改">
+                      <i class="ace-icon fa fa-pencil bigger-120"></i>
+                    </a> -->
+                    <!-- <button class="btn btn-xs btn-danger" type="button" onclick="dels({$v.uid})" title="删除">
+                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                    </button> -->
+                  </td>
+                </tr>
+                {/volist}
+                {empty name="list"}<tr><td colspan="11" class="text-center">暂无数据</td></tr>{/empty}
+                </tbody>
+
+              </table>
+              <div class="text-center">
+                <ul class="pagination" id="result">
+                  {$page}
+                </ul>
+              </div>
+            </div>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.page-content -->
+    </div>
+  </div><!-- /.main-content -->
+
+{include file="public:footer"}
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+  <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+</div><!-- /.main-container -->
+
+<div class="modal fade" id="recharge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">充值</h4>
+            </div>
+            <div class="modal-body">
+              充值能量币：<input type="number" name="recharge" id="recharge_number" placeholder="请输入充值能量币数量">
+              <input type="hidden" name="user_id" id="user_id">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="recharge_submit()">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
+
+<script>
+  jQuery(function($) {
+    $('[data-rel=tooltip]').tooltip();
+
+    $( "#hide-option" ).tooltip({
+      hide: {
+        effect: "explode",
+        delay: 250
+      }
+    });
+
+  })
+</script>
+<script type="text/javascript">
+		function dels(id){
+			layer.confirm('你确定删除此会员吗？', {icon: 3}, function(index){
+		    layer.close(index);
+		    $.ajax({
+            type:"post",
+            url:"{:url('Member/delete')}",
+              data:{id:id},
+              datatype:"text",
+              success:function(re){
+                if(re == 2 || re==1){
+                    layer.msg("系统繁忙请稍后再试");
+                    location.href="{:url('Member/lister')}";
+                }
+                
+                if(re == 0){
+                  layer.msg("删除成功")
+                  location.href="{:url('Member/lister')}";
+                }
+              }
+          })
+		  });
+	    }
+		</script>
+<script>
+function recharge(id){
+  event.preventDefault();
+  var recharge = $('#recharge');
+  $("#user_id").val(id);
+  $('#recharge').modal('show');
+}
+
+function recharge_submit(){
+  event.preventDefault();
+  var recharge_number = $("#recharge_number").val();
+  if(recharge_number <= 0){
+    layer.msg('请输入正确充值能量币数量！');
+    return;
+  }
+  var user_id = $("#user_id").val();
+  if(user_id == 0){
+    layer.msg('未选择会员!');
+    return;
+  }
+  $.ajax({
+    url: "{:url('member/recharge_money')}",
+    type: 'post',
+    data: {money: recharge_number, uid: user_id},
+    success: function(data){
+      layer.msg(data.msg);
+      if(data.error_code == 1){
+        var old_money = parseInt($("#money"+user_id).html());
+        $("#money" + user_id).html(old_money + parseInt(data.data));
+      }
+    }
+  })
+}
+
+function status(id){
+  $.ajax({
+    url: "{:url('member/status')}",
+    type: 'post',
+    data: {id: id},
+    success: function(data){
+      layer.msg(data.msg);
+      if(data.error_code == 1){
+        $("#tdstatus"+id).html('普通会员');
+        $("#status"+id).attr("style", "display:none;");
+      }
+    }
+  })
+}
+</script>
+
+
+  <script>
+  $("#change").click(function(){
+  	$("#sortForm").submit();
+  })
+
+  </script>
+</body>
+</html>

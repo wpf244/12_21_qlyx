@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+  <!--头部-->
+  {include file="public:nav"}
+
+  <div class="main-container ace-save-state" id="main-container">
+    <!--菜单-->
+    <script type="text/javascript">
+      try {
+        ace.settings.loadState('main-container')
+      } catch (e) {}
+    </script>
+
+    {include file="public:left"}
+
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+          <ul class="breadcrumb">
+            <li>
+              <i class="ace-icon fa fa-home home-icon"></i>
+              <a href="{:url('Index/index')}">首页</a>
+            </li>
+
+            <li class="active">队列管理</li>
+            <li class="active">进化管理</li>
+            <li class="active">进化列表</li>
+          </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <div class="page-content">
+          {include file="public:set"}
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="col-sm-10 col-sm-offset-1">
+                <div class="page-header">
+                  <div class="row">
+                    <div class="col-sm-4">
+                    </div>
+
+                    <div class="col-sm-10 clearfix">
+                    </div>
+                  </div>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                          <th></th>
+                          <th>阶段</th>
+                          <th>等级</th>
+                          <th>时期</th>
+                          <th>图片</th>
+                          <th>属性</th>
+                          <th>战斗值</th>
+                          <th>所需能量</th>
+                          <th>进阶</th>
+                          <th>特点</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                  <tbody>
+                    {for start="1" end="6" name="l"}
+                    <tr class="ace-thumbnails">
+                        <td>
+                            <span class="glyphicon glyphicon-plus" power="jia" id="jiajian{$l}" onclick="gg({$l})"></span>
+                        </td>
+                        <td>
+                          {if condition="$l == 1"}百元阶段
+                          {elseif condition="$l == 2"}千元阶段
+                          {elseif condition="$l == 3"}万元阶段
+                          {elseif condition="$l == 4"}十万元阶段
+                          {elseif condition="$l == 5"}百万元阶段
+                          {/if}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                        </td>
+                      </tr>
+                      {volist name="list" id="v"}
+                      {if condition="$v.level == $l"}
+                      <tr class="ace-thumbnails tr{$l}" style="display:None;">
+                        <td></td>
+                        <td></td>
+                        <td><span class="badge badge-grey">{$v.id}</span></td>
+                        <td>{$v.shiqi}</td>
+                        <td class="ace-thumbnails hidden-480">
+                            <li><a href="{$v.image}" data-rel="colorbox">
+                                <img width="40" height="40" alt="150x150" src="{$v.image}" />
+                                <div class="text">
+                                  <div class="inner">点击放大</div>
+                                </div>
+                              </a></li>
+                        </td>
+                        <td>{$v.shuxing}</td>
+                        <td>{$v.zhandouzhi}</td>
+                        <td>{$v.suoxunengliang}</td>
+                        <td>{$v.jinjie}</td>
+                        <td>{$v.tedian}</td>
+                        <td>
+                          <a class="btn btn-xs btn-info" href="{:url('monster_update',array('id'=>$v['id']))}">
+                            <i class="ace-icon fa fa-pencil bigger-120"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      {/if}
+                      {/volist}
+                    {empty name="list"}<tr>
+                      <td colspan="15" class="text-center">暂无数据</td>
+                    </tr>{/empty}
+                    {/for}
+                  </tbody>
+                  
+                </table>
+                <div class="text-center">
+                </div>
+              </div>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.page-content -->
+      </div>
+    </div><!-- /.main-content -->
+
+    {include file="public:footer"}
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+      <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+  </div><!-- /.main-container -->
+
+  <script>
+    jQuery(function ($) {
+      $('[data-rel=tooltip]').tooltip();
+
+      $("#hide-option").tooltip({
+        hide: {
+          effect: "explode",
+          delay: 250
+        }
+      });
+
+    })
+  </script>
+  <script type="text/javascript">
+    function dels(id) {
+      layer.confirm('你确定删除吗？', {
+        icon: 3
+      }, function (index) {
+        layer.close(index);
+        window.location.href = "__URL__/delete/id/" + id;
+      });
+    }
+  </script>
+  <script>
+    function change(id) {
+      $.ajax({
+        type: "post",
+        url: "__URL__/change",
+        data: {
+          id: id
+        },
+        datatype: "text",
+        success: function () {
+
+        }
+      })
+    }
+
+    function changes(id) {
+      $.ajax({
+        type: "post",
+        url: "__URL__/changes",
+        data: {
+          id: id
+        },
+        datatype: "text",
+        success: function () {
+
+        }
+      })
+    }
+  </script>
+
+
+  <script>
+    $("#change").click(function () {
+      $("#sortForm").submit();
+    })
+
+    function gg(id){
+        var ggid = $("#jiajian"+id);
+        if(ggid.attr('power') == 'jia'){
+            ggid.attr('class','glyphicon glyphicon-minus')
+            ggid.attr('power','jian')
+            $(".tr"+id).attr('style','display:black;')
+        }else{
+            ggid.attr('class','glyphicon glyphicon-plus')
+            ggid.attr('power','jia')
+            $(".tr"+id).attr('style','display:none;')
+        }
+        
+    }
+  </script>
+</body>
+
+</html>

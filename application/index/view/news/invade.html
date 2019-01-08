@@ -1,20 +1,261 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="zh-CN">
-    {include file="public:header"}
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>毒液</title>
+    <link rel="stylesheet" href="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="__HOME__/css/style.min.css">
+    <script src="http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.js"></script>
+    <script>
+      $(document).on("pageshow","#invade",function(){
+        setTimeout(function() {
+          $('.venom').addClass('move')
+          $('.moster').addClass('fmove')
+        }, 600)
+      });
+      $(document).on("pagehide","#invade",function(){
+        $('.venom').removeClass('move')
+        $('.moster').removeClass('fmove')
+      });
+    </script>
+    <script src="__HOME__/js/main.js"></script>
+    <script src="__ADMIN__/assets/layer/layer.js"></script>
+  </head>
   <body>
     <div data-role="page" id="invade" data-theme="c">
       <div class="ui-content" data-role="main" data-theme="c">
         <div class="notice">欢迎各位入侵者寻找宿主！</div>
-        <div class="venom"></div>
-        <div class="action"><a class="user" href="{:url('User/index')}" data-ajax="false"></a><a class="video" href="{:url('News/video')}" data-ajax="false"></a>
-        </div>
-        <div class="invadeinfo" style="color:aliceblue;">
-          <span>当前入侵序号:{$queue.queue_id}</span>
-          <?php $number = $last_queue['queue_id']%12 == 0 ? 1 : 13-$last_queue['queue_id']%12; ?>
-					<br>
-          <span>本轮入侵还有{$number}位</span>
-        </div>
+        {if condition="$queue.need_kill_number > $queue.already_kill_number"} <?php $status = 1; ?> {else /} <?php $status = 0; ?> {/if}
+          <div class="venom"></div>
+          <img class="moster" src="__HOME__/img/moster.png" style="display:{if condition='$status == 1'}display{else /}None{/if}">
+          <div class="satrBtn" onclick="kill_monster()" style="display:{if condition='$status == 1'}display{else /}None{/if}"></div>
+        <div class="action"><a class="user" href="{:url('User/index')}" data-ajax="false"></a><a class="video" href="{:url('News/video')}" data-ajax="false"></a></div>
+        
+      </div>
+      <div class="invadeinfo" style="color:aliceblue;">
       </div>
     </div>
   </body>
+  <img id="moster" src="__HOME__/img/moster.png" style="display:None;"/>
+  <img id="mosteractive" src="__HOME__/img/mosteractive.png" style="display:None;"/>
+  <script>
+    function kill_monster(){
+      $('.satrBtn').hide()
+        $.ajax({
+          url: "{:url('News/kill_monster')}",
+          success: function(data){
+            bol = false;
+            setTimeout(function(){
+              layer.msg("击杀了怪物!");
+            },2000);
+            var timer = setTimeout(function(){
+              if(data == 1){ //没有下一个怪物了
+                // $(".satrBtn").hide()
+                // $(".satrBtn").attr("style", "display:None;");
+              }else if(data == 2){ //还有下一个怪物
+                clearTimeout(timer)
+                $(".satrBtn").show()
+                $(".moster").attr("style", "display:display;");
+                $(".moster").attr("src", $("#moster").attr('src'));
+                bol = true;
+              }else{
+                layer.msg("失败");
+              }
+            },3000);
+          }
+        })
+
+      
+    }
+  </script>
+
+</html> -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+{include file="public:header"}
+
+<body>
+  <div data-role="page" id="invade" data-theme="c">
+    <div class="ui-content" data-role="main" data-theme="c">
+      <div class="notice">{$lb_place.name}</div>
+      <div class="roleBg"><img src="__HOME__/img/light.png" alt=""></div>
+      {if condition="$queue.need_kill_number > $queue.already_kill_number"}
+      <?php $status = 1; ?> {else /}
+      <?php $status = 0; ?> {/if}
+      <div class="scene">
+        <div class="mainRole"><img class="roleImg" src="{$monster.image}" alt="{$monster.sort}"></div>
+      </div>
+      <div class="mainRoleBotton">
+        <div class="band">
+          <table>
+            <tr>
+              <td>时期</td>
+              <td id="shiqi">{$monster.shiqi}</td>
+              <td>属性</td>
+              <td id="shuxing">{$monster.shuxing}</td>
+            </tr>
+            <tr>
+              <td>战斗值</td>
+              <td id="zhandouzhi">{$monster.zhandouzhi}</td>
+              <td>所需能量</td>
+              <td id="suoxunengliang">{$monster.suoxunengliang}</td>
+            </tr>
+            <tr>
+              <td>进阶</td>
+              <td id="jinjie">{$monster.jinjie}</td>
+              <td>特点</td>
+              <td id="tedian">{$monster.tedian}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="compound" data-statu="0" monster="{$monster.id}" style="display:{if condition='$status == 1'}display{else /}None{/if}">可合成</div>
+      </div>
+      <div class="action"><a class="user" href="{:url('User/index')}" data-ajax="false"></a><a class="video" href="{:url('News/video')}"
+          data-ajax="false"></a></div>
+    </div>
+    <audio src="__HOME__/music.mp3" autoplay loop></audio>
+    <div class="invadeinfo" style="color:aliceblue;font-size:13px;">
+
+    </div>
+  </div>
+</body>
+
+<div id="log_id" data_id="{$log.id}" all_number="0"></div>
+<script>
+  var need_kill_number = parseInt("{$queue.need_kill_number}");
+  var already_kill_number = parseInt("{$queue.already_kill_number}");
+  if(need_kill_number > already_kill_number){
+    var cloneObj = $('.mainRole:eq(0)').clone().addClass('clone')
+    $('.mainRole').after(cloneObj)
+  }else{
+    $('.mainRole').addClass('ding').css({
+      width: '280px'
+    })
+  }
+
+  $('.compound').click(function () {
+       $('.compound').attr('data-statu', 1)
+  
+        $('.compound').hide()
+        var monster = parseInt($(".compound").attr("monster"));
+        $.ajax({
+          url: "{:url('News/kill_monster')}",
+          data: {id: monster},
+          type: "post",
+          success: function (data) {
+            //合成完成直接获取下一个怪物
+            if(data.status >= 1){
+              //合成动画1700    
+              // $('.roleBg').fadeIn().delay(1000).fadeOut(500,function() {
+              //   $('#roleImg').attr('src', data.monster['image']);
+              //   $('#roleImg').attr('alt', data.monster['sort']);
+              // })
+              merge(data.monster['image'], data.monster['sort']);
+              setTimeout(function () {
+                $("#shiqi").html(data.monster['shiqi']);
+                $("#shuxing").html(data.monster['shuxing']);
+                $("#zhandouzhi").html(data.monster['zhandouzhi']);
+                $("#suoxunengliang").html(data.monster['suoxunengliang']);
+                $("#jinjie").html(data.monster['jinjie']);
+                $("#tedian").html(data.monster['tedian']);
+                $(".compound").attr('monster', data.monster['id']);
+              }, 2500);
+            }
+            var timer = setTimeout(function () {
+              if (data.status == 1) { //没有下一个怪物了
+                if(data.monster['sort'] >= 11){
+                  setTimeout(function () {
+                    location.reload()
+                  }, 2500);
+                }
+              } else if (data.status == 2) { //还有下一个怪物
+                clearTimeout(timer)
+                $(".compound").show()
+                split();
+              } else {
+                layer.msg("失败");
+              }
+            }, 4000);
+          }
+        })
+      })
+
+  function split(){
+    var cloneObj = $('.mainRole:eq(0)').removeClass('ding movel').removeAttr('style').clone().addClass('clone')
+      $('.mainRole').after(cloneObj)
+  }
+
+  function merge(src, alt) {
+    $('.mainRole:eq(0)').addClass('movel')
+    $('.mainRole.clone').addClass('mover').delay(300).fadeOut(300,function(){
+      $(this).remove()
+      // $('.mainRole:eq(0)').addClass('ding').delay(300).addClass('big')
+      $('.mainRole:eq(0)').addClass('ding').animate({
+        width: '280px'
+      },function() {
+        $('.roleBg').fadeIn().delay(1000).fadeOut(500,function() {
+          $('.roleImg').attr('src', src)
+          $('.roleImg').attr('alt', alt)
+        })
+      })
+    })
+  }
+
+  function djs(){
+    // var log_id = $("#log_id").attr('data_id');
+    var queue_table = "{$queue_table}";
+    var queue_id = parseInt("{$queue.queue_id}");
+    $.ajax({
+      url: "{:url('News/r_log')}",
+      data: {queue_table: queue_table},
+      type: "post",
+      success: function(res){
+        var data = res['queue'];
+        var user = res['user'];
+        var number = queue_id*12-data['queue_id'];
+        if(number <= 10){
+          if(number <= 0){
+            number = 0;
+          }
+          $(".invadeinfo").append("<span class='content'>距离契约神兽还差:"+number+"</br></span>");
+          var number = parseInt($("#log_id").attr("all_number"))
+          if(number + 1 > 4){
+            $(".content").first().remove()
+          }else{
+            $("#log_id").attr("all_number", number+1);
+          }
+        }
+        if(user['need_kill_number'] > user['already_kill_number']){
+          if ($(".compound:hidden").length) {
+            console.log(111);
+            $(".compound").show()
+            split();
+          }
+        }
+      }
+    })
+  }
+  
+ // djs();
+ 
+  time1 =setInterval(function(){
+    var status=$('.compound').data('statu');
+   if(status == 0){
+    djs();
+   }else{
+     if($(".compound:visible").length){
+      djs();
+     }
+   }
+   
+    
+  }, 20000)
+ 
+</script>
+
 </html>

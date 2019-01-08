@@ -1,59 +1,117 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
+
   {include file="public:header"}
+
   <body>
+
     <div class="user" data-role="page" id="user" data-theme="c">
+
       <div class="ui-content" data-role="main" data-theme="c">
-        <div class="header">个人中心<a class="back" href="#" data-rel="back"></a></div>
+
+        <div class="header">个人中心<a class="back" href="{:url('News/index')}" data-ajax="false"></a></div>
+
         <div class="content">
+
           <div class="info text-center">
+
             <h2>{$re.username}</h2>
+
             <p>剩余能量: {$re.money}</p>
+
             <div class="flex useraction"><a href="{:url('User/recharge_change')}" data-ajax="false">我要充值</a><a href="{:url('User/withdraw')}" data-ajax="false">我要提现</a></div>
+
           </div>
+
           <ul class="nostyle menulist">
+
             <li class="changeName target" data-mymodal="#changename"> <a href="###">昵称修改</a></li>
+
           </ul>
+
         </div>
+
         <div class="modal" id="changename">
+
           <div class="shade">
+
             <div class="inner" style="width: 272px;height:258px;">
+
               
+
                 <label>昵称</label>
+
                 <input type="text" name="username">
+
                 <input type="submit" id="btn" value="确认">
+
               
+
             </div>
+
           </div>
+
         </div><a class="pb text-center out" data-ajax="false" href="{:url('Login/out')}"></a>
+
       </div>
+
     </div>
+
   <script>
+
    
+
     
+
     $("#btn").click(function(){
+
       var username=$.trim($("input[name=username]").val());
+
       if(username == ''){
+
         layer.msg("请输入昵称!");return false;
+
       }
+
       $.ajax({
+
          type:"post",
+
          url:"{:url('User/usave')}",
+
          data:{username:username},
+
          dataType:"text",
+
          success:function(re){
+
             if(re == 0){
+
                layer.msg("修改成功");
+
                location.reload();
+
             }
+
             if(re == 1){
+
               location.href="{:url('Login/out')}";
+
             }
+
          }
 
+
+
       })
+
        
+
     })
+
   </script>  
+
   </body>
+
 </html>

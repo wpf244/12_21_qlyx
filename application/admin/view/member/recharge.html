@@ -1,195 +1,195 @@
-<!DOCTYPE html>
-<html>
-{include file="public:header"}
-
-<body class="no-skin">
-    <!--头部-->
-    {include file="public:nav"}
-
-    <div class="main-container ace-save-state" id="main-container">
-        <!--菜单-->
-        <script type="text/javascript">
-            try {
-                ace.settings.loadState('main-container')
-            } catch (e) {}
-        </script>
-
-        {include file="public:left"}
-
-        <div class="main-content">
-            <div class="main-content-inner">
-                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="ace-icon fa fa-home home-icon"></i>
-                            <a href="{:url('Index/index')}">首页</a>
-                        </li>
-                        <li class="active">会员管理</li>
-                        <li class="active">充值记录</li>
-                    </ul><!-- /.breadcrumb -->
-
-                </div>
-
-                <div class="page-content">
-                    {include file="public:set"}
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="col-sm-10 col-sm-offset-1">
-                                <div class="page-header">
-                                    <div class="col-sm-2">
-                                    </div>
-                                    <div class="row">
-                                        <form class="form-inline pull-right" action="">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-th-list"></i>
-                                                    </span>
-                                                    <select class="form-control" name="status" id="status">
-                                                        <option selected value="-1">状态</option>
-                                                        <option value="0" {if condition="$status == 0" } selected {/if}>未审核
-                                                            </option> <option value="1" {if condition="$status == 1" }
-                                                            selected {/if}>未打款 </option> <option value="2" {if
-                                                            condition="$status == 2" } selected {/if}>已提现 </option>
-                                                            <option value="3" {if condition="$status == 3" } selected {/if}>已驳回
-                                                            </option> </select> </div> </div> 
-                                                <div class="form-group">
-                                                    <div class="input-daterange input-group">
-                                                        <input type="text" class="form-control search-query" name="start"
-                                                            value="{$start}" id="start" placeholder="选择开始时间" />
-                                                        <span class="input-group-addon">
-                                                            <i class="fa fa-exchange"></i>
-                                                        </span>
-                                                        <input type="text" class="form-control search-query" name="end"
-                                                            value="{$end}" id="end" placeholder="选择结束时间" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <button type="submit" class="btn btn-info btn-sm ajax-search-form">
-                                                                <span class="ace-icon fa fa-search icon-on-right bigger-120"></span>
-                                                                搜索
-                                                            </button>
-                                                        </span>
-                                                        <span class="input-group-btn">
-                                                            <a class="btn btn-info btn-sm ajax-search-form" href="{:url('Member/recharge')}">
-                                                              还原
-                                                            </a>
-                                                          </span>
-                                                    </div>
-                                                </div>
-                                        </form>
-                                        <div class="col-sm-12 clearfix">
-                                        </div>
-                                    </div>
-                                </div>
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-
-                                            <th>ID</th>
-                                            <th class="hidden-480">会员昵称</th>
-                                            <th class="hidden-480">会员手机号</th>
-                                            <th>充值金额</th>
-                                            <th>充值时间</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {volist name="list" id="v"}
-                                        <tr class="ace-thumbnails">
-                                            <td><span class="badge badge-grey">{$v.id}</span></td>
-                                            <td>{$v.username}</td>
-                                            <td>{$v.phone}</td>
-                                            <td>{$v.number}</td>
-                                            <td>{$v.create_time|date="Y-m-d H:i:s",###}</td>
-                                        </tr>
-                                        {/volist}
-                                        {empty name="list"}<tr>
-                                            <td colspan="15" class="text-center">暂无数据</td>
-                                        </tr>{/empty}
-                                    </tbody>
-                                </table>
-                                <div class="text-center">
-                                    {$list->render()}
-                                </div>
-                            </div>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.page-content -->
-            </div>
-        </div><!-- /.main-content -->
-
-        {include file="public:footer"}
-
-        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-        </a>
-    </div><!-- /.main-container -->
-
-    <script>
-        jQuery(function ($) {
-            $('[data-rel=tooltip]').tooltip();
-
-            $("#hide-option").tooltip({
-                hide: {
-                    effect: "explode",
-                    delay: 250
-                }
-            });
-
-        })
-
-        jQuery(function ($) {
-
-            $('.input-daterange').datepicker({
-                autoclose: true,
-                language: "zh-CN",
-                format: "yyyy-mm-dd"
-            });
-
-            $('[data-rel=tooltip]').tooltip();
-
-            $("#hide-option").tooltip({
-                hide: {
-                    effect: "explode",
-                    delay: 250
-                }
-            });
-
-        })
-
-        $("#out").click(function () {
-            var status = $("#status").val();
-            var wx_account = $("#wx_account").val();
-            var wx_nickname = $("#wx_nickname").val();
-            var start = $("#start").val();
-            var end = $("#end").val();
-            location.href = "__URL__/balance_out/status/" + status + "/wx_account/" + wx_account + "/wx_nickname/" + wx_nickname + '/end/' + end + "/start/" + start;
-        })
-    </script>
-    <script type="text/javascript">
-        function pass(id, ftype) {
-            $.ajax({
-                url: "{:url('Member/withdraw_pass')}",
-                type: 'post',
-                data: {
-                    id: id,
-                    ftype: ftype
-                },
-                success: function (data) {
-                    window.location.reload();
-                }
-            })
-        }
-    </script>
-
-
-    <script>
-        $("#change").click(function () {
-            $("#sortForm").submit();
-        })
-    </script>
-</body>
-
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+    <!--头部-->
+    {include file="public:nav"}
+
+    <div class="main-container ace-save-state" id="main-container">
+        <!--菜单-->
+        <script type="text/javascript">
+            try {
+                ace.settings.loadState('main-container')
+            } catch (e) {}
+        </script>
+
+        {include file="public:left"}
+
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="{:url('Index/index')}">首页</a>
+                        </li>
+                        <li class="active">会员管理</li>
+                        <li class="active">充值记录</li>
+                    </ul><!-- /.breadcrumb -->
+
+                </div>
+
+                <div class="page-content">
+                    {include file="public:set"}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="page-header">
+                                    <div class="col-sm-2">
+                                    </div>
+                                    <div class="row">
+                                        <form class="form-inline pull-right" action="">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-th-list"></i>
+                                                    </span>
+                                                    <select class="form-control" name="status" id="status">
+                                                        <option selected value="-1">状态</option>
+                                                        <option value="0" {if condition="$status == 0" } selected {/if}>未审核
+                                                            </option> <option value="1" {if condition="$status == 1" }
+                                                            selected {/if}>未打款 </option> <option value="2" {if
+                                                            condition="$status == 2" } selected {/if}>已提现 </option>
+                                                            <option value="3" {if condition="$status == 3" } selected {/if}>已驳回
+                                                            </option> </select> </div> </div> 
+                                                <div class="form-group">
+                                                    <div class="input-daterange input-group">
+                                                        <input type="text" class="form-control search-query" name="start"
+                                                            value="{$start}" id="start" placeholder="选择开始时间" />
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-exchange"></i>
+                                                        </span>
+                                                        <input type="text" class="form-control search-query" name="end"
+                                                            value="{$end}" id="end" placeholder="选择结束时间" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <button type="submit" class="btn btn-info btn-sm ajax-search-form">
+                                                                <span class="ace-icon fa fa-search icon-on-right bigger-120"></span>
+                                                                搜索
+                                                            </button>
+                                                        </span>
+                                                        <span class="input-group-btn">
+                                                            <a class="btn btn-info btn-sm ajax-search-form" href="{:url('Member/recharge')}">
+                                                              还原
+                                                            </a>
+                                                          </span>
+                                                    </div>
+                                                </div>
+                                        </form>
+                                        <div class="col-sm-12 clearfix">
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+
+                                            <th>ID</th>
+                                            <th class="hidden-480">会员昵称</th>
+                                            <th class="hidden-480">会员手机号</th>
+                                            <th>充值金额</th>
+                                            <th>充值时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {volist name="list" id="v"}
+                                        <tr class="ace-thumbnails">
+                                            <td><span class="badge badge-grey">{$v.id}</span></td>
+                                            <td>{$v.username}</td>
+                                            <td>{$v.phone}</td>
+                                            <td>{$v.number}</td>
+                                            <td>{$v.create_time|date="Y-m-d H:i:s",###}</td>
+                                        </tr>
+                                        {/volist}
+                                        {empty name="list"}<tr>
+                                            <td colspan="15" class="text-center">暂无数据</td>
+                                        </tr>{/empty}
+                                    </tbody>
+                                </table>
+                                <div class="text-center">
+                                    {$list->render()}
+                                </div>
+                            </div>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.page-content -->
+            </div>
+        </div><!-- /.main-content -->
+
+        {include file="public:footer"}
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div><!-- /.main-container -->
+
+    <script>
+        jQuery(function ($) {
+            $('[data-rel=tooltip]').tooltip();
+
+            $("#hide-option").tooltip({
+                hide: {
+                    effect: "explode",
+                    delay: 250
+                }
+            });
+
+        })
+
+        jQuery(function ($) {
+
+            $('.input-daterange').datepicker({
+                autoclose: true,
+                language: "zh-CN",
+                format: "yyyy-mm-dd"
+            });
+
+            $('[data-rel=tooltip]').tooltip();
+
+            $("#hide-option").tooltip({
+                hide: {
+                    effect: "explode",
+                    delay: 250
+                }
+            });
+
+        })
+
+        $("#out").click(function () {
+            var status = $("#status").val();
+            var wx_account = $("#wx_account").val();
+            var wx_nickname = $("#wx_nickname").val();
+            var start = $("#start").val();
+            var end = $("#end").val();
+            location.href = "__URL__/balance_out/status/" + status + "/wx_account/" + wx_account + "/wx_nickname/" + wx_nickname + '/end/' + end + "/start/" + start;
+        })
+    </script>
+    <script type="text/javascript">
+        function pass(id, ftype) {
+            $.ajax({
+                url: "{:url('Member/withdraw_pass')}",
+                type: 'post',
+                data: {
+                    id: id,
+                    ftype: ftype
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            })
+        }
+    </script>
+
+
+    <script>
+        $("#change").click(function () {
+            $("#sortForm").submit();
+        })
+    </script>
+</body>
+
 </html>

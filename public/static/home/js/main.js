@@ -23,6 +23,48 @@ $(function() {
   //   // e.sto
   //   $('.modal').fadeOut()
   // })
+//   var count = 5
+//   $('.compound').click(function() {
+//     if (count > 0) {
+//       $('.roleBg').fadeIn().delay(1000).fadeOut(500,function() {
+//         $('#roleImg').attr('src', 'img/leave0'+count+'.png')
+//       })
+//       $
+//       count--
+//     }
+//     if (count <= 0) {
+//       $(this).hide()
+//     }
+      
+//       // $('.venom').animate({
+//       //   right: '50%'
+//       // }, function() {
+//       //   $('.moster').attr('src', '../img/mosteractive.png').delay(1500).fadeOut()
+//       // }).delay(600).animate({
+//       //   right: '0'
+//       // })
+// // .css({
+// //   backgroundImage: 'url("../img/venomactive.png")'
+// // })
+   
+//     // $('.moster').css({
+//     //   backgroundImage: 'url("../img/mosteractive.png")',
+//     //   backgroundSize: '150%'
+//     // })
+//   })
+
+  $("#find").click(function() {
+    $('.find-wrapper').fadeIn()
+  })
+
+  $('.find-wrapper').on('click',function(e){
+    var _con = $('.inner');   // 设置目标区域
+    if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+        // $(this).hide()
+        $(this).fadeOut()
+    }
+
+})
 
   $('.shade').on('click',function(e){
     var _con = $('.inner');   // 设置目标区域

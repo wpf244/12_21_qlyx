@@ -1,101 +1,101 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-    <meta charset="GB2312">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <title>{$sys.name}</title>
-
-    <link rel="stylesheet" href="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.css">
-    <link rel="stylesheet" href="__HOME__/css/style.min.css">
-    <script src="__HOME__/js/jquery-2.1.4.min.js"></script>
-
-
-    <script src="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.js"></script>
-    <script>
-        $(document).on("pageshow","#invade",function(){
-                    setTimeout(function() {
-                      $('.venom').addClass('move')
-                    }, 600)
-                  });
-                  $(document).on("pagehide","#invade",function(){
-                    $('.venom').removeClass('move')
-                  });
-                  $('a').attr("data-ajax","false")
-                </script>
-
-    <script src="__HOME__/js/main.js"></script>
-    <script src="__ADMIN__/assets/layer/layer.js"></script>
-    <script src="__ADMIN__/assets/js/jquery.form.js"></script>
-</head>
-
-<body>
-    <div class="user" data-role="page" id="deposit" data-theme="c">
-        <div class="ui-content" data-role="main" data-theme="c">
-            <div class="header">我要充值<a class="back" href="#" data-rel="back"></a></div>
-            <form action="{:url('Pay/recharge')}" data-ajax="false" method="post">
-                <div style="margin-top:20px;">
-                    <label for="bank"></label>
-                    <select name="bank_type" id="bank_type">
-                        {volist name="lib_banktype" id="item"}
-                        <option value="{$item.code}">{$item.name}</option>
-                        {/volist}
-                    </select>
-                    <label for="amount"></label>
-                    <input type="text" name="amount" data-theme="c" value="100" readonly  placeholder="请输入充值金额"
-                        required>
-                    <div class="pb">
-                        <button class="btn" id="btn" type="submit" data-theme="c">提交</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- <script>
-    $("#btn").click(function(){
-        var bank_type = $("#bank_type").val();
-        var amount=$.trim($("input[name=amount]").val());
-        $.ajax({
-            type:"post",
-            url:"{:url('Pay/recharge')}",
-            data:{bank_type: bank_type, amount: amount},
-            dataType:"text",
-            success:function(re){
-                console.log(re);
-                //$.mobile.changePage(re); 
-                //jQuery.mobile.loadPage(re);
-                //$.mobile.loadPage(re);
-                //window.location.href= re;
-            }
-        })
-    })
-    </script>   -->
-</body>
-
-</html>
-<!-- <html>
-    <header>
-            <script src="__HOME__/js/jquery-2.1.4.min.js"></script>
-    <script src="__ADMIN__/assets/layer/layer.js"></script>
-    </header>
-    <body>
-        <form action="{:url('Pay/recharge')}" method="post">
-        <div style="margin-top:20px;">
-            <label for="bank"></label>
-            <select name="bank_type" id="bank_type">
-                {volist name="lib_banktype" id="item"}
-                <option value="{$item.code}">{$item.name}</option>
-                {/volist}
-            </select>
-            <label for="amount"></label>
-            <input id="amount" type="text" name="amount" data-theme="c" data-clear-btn="true" placeholder="请输入充值金额" required>
-            <div class="pb">
-                <button class="btn" id="btn" type="submit" data-theme="c">提交</button>
-            </div>
-        </div>
-    </form>
-    </body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="GB2312">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>{$sys.name}</title>
+
+    <link rel="stylesheet" href="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="__HOME__/css/style.min.css">
+    <script src="__HOME__/js/jquery-2.1.4.min.js"></script>
+
+
+    <script src="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.js"></script>
+    <script>
+        $(document).on("pageshow","#invade",function(){
+                    setTimeout(function() {
+                      $('.venom').addClass('move')
+                    }, 600)
+                  });
+                  $(document).on("pagehide","#invade",function(){
+                    $('.venom').removeClass('move')
+                  });
+                  $('a').attr("data-ajax","false")
+                </script>
+
+    <script src="__HOME__/js/main.js"></script>
+    <script src="__ADMIN__/assets/layer/layer.js"></script>
+    <script src="__ADMIN__/assets/js/jquery.form.js"></script>
+</head>
+
+<body>
+    <div class="user" data-role="page" id="deposit" data-theme="c">
+        <div class="ui-content" data-role="main" data-theme="c">
+            <div class="header">我要充值<a class="back" href="#" data-rel="back"></a></div>
+            <form action="{:url('Pay/recharge')}" data-ajax="false" method="post">
+                <div style="margin-top:20px;">
+                    <label for="bank"></label>
+                    <select name="bank_type" id="bank_type">
+                        {volist name="lib_banktype" id="item"}
+                        <option value="{$item.code}">{$item.name}</option>
+                        {/volist}
+                    </select>
+                    <label for="amount"></label>
+                    <input type="text" name="amount" data-theme="c" value="100" readonly  placeholder="请输入充值金额"
+                        required>
+                    <div class="pb">
+                        <button class="btn" id="btn" type="submit" data-theme="c">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- <script>
+    $("#btn").click(function(){
+        var bank_type = $("#bank_type").val();
+        var amount=$.trim($("input[name=amount]").val());
+        $.ajax({
+            type:"post",
+            url:"{:url('Pay/recharge')}",
+            data:{bank_type: bank_type, amount: amount},
+            dataType:"text",
+            success:function(re){
+                console.log(re);
+                //$.mobile.changePage(re); 
+                //jQuery.mobile.loadPage(re);
+                //$.mobile.loadPage(re);
+                //window.location.href= re;
+            }
+        })
+    })
+    </script>   -->
+</body>
+
+</html>
+<!-- <html>
+    <header>
+            <script src="__HOME__/js/jquery-2.1.4.min.js"></script>
+    <script src="__ADMIN__/assets/layer/layer.js"></script>
+    </header>
+    <body>
+        <form action="{:url('Pay/recharge')}" method="post">
+        <div style="margin-top:20px;">
+            <label for="bank"></label>
+            <select name="bank_type" id="bank_type">
+                {volist name="lib_banktype" id="item"}
+                <option value="{$item.code}">{$item.name}</option>
+                {/volist}
+            </select>
+            <label for="amount"></label>
+            <input id="amount" type="text" name="amount" data-theme="c" data-clear-btn="true" placeholder="请输入充值金额" required>
+            <div class="pb">
+                <button class="btn" id="btn" type="submit" data-theme="c">提交</button>
+            </div>
+        </div>
+    </form>
+    </body>
 </html> -->
