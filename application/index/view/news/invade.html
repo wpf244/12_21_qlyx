@@ -267,8 +267,11 @@
             $(".compound").show()
             split();
           }else{
-            clicked = false;
+            if(clicked){
+             
+             clicked = false;
             split();
+           }
           }
         }
       }
