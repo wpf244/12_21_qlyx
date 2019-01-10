@@ -135,7 +135,7 @@
             </tr>
           </table>
         </div>
-        <div class="compound" data-statu="0" monster="{$monster.id}" style="display:{if condition='$status == 1'}display{else /}None{/if}">可合成</div>
+        <div class="compound" data-statu="0" monster="{$monster.id}" style="display:{if condition='$status == 1'}display{else /}None{/if}">合成</div>
       </div>
       <div class="action"><a class="user" href="{:url('User/index')}" data-ajax="false"></a><a class="video" href="{:url('News/video')}"
           data-ajax="false"></a></div>
@@ -164,52 +164,56 @@
       width: '280px'
     })
   }
-
+  var clicked = false
   $('.compound').click(function () {
-       $('.compound').attr('data-statu', 1)
+    if(!clicked){
+      $('.compound').attr('data-statu', 1)
   
-        $('.compound').hide()
-        var monster = parseInt($(".compound").attr("monster"));
-        $.ajax({
-          url: "{:url('News/kill_monster')}",
-          data: {id: monster},
-          type: "post",
-          success: function (data) {
-            //合成完成直接获取下一个怪物
-            if(data.status >= 1){
-              //合成动画1700    
-              // $('.roleBg').fadeIn().delay(1000).fadeOut(500,function() {
-              //   $('#roleImg').attr('src', data.monster['image']);
-              //   $('#roleImg').attr('alt', data.monster['sort']);
-              // })
-              merge(data.monster['image'], data.monster['sort']);
-              setTimeout(function () {
-                $("#shiqi").html(data.monster['shiqi']);
-                $("#shuxing").html(data.monster['shuxing']);
-                $("#zhandouzhi").html(data.monster['zhandouzhi']);
-                $("#suoxunengliang").html(data.monster['suoxunengliang']);
-                $("#jinjie").html(data.monster['jinjie']);
-                $("#tedian").html(data.monster['tedian']);
-                $(".compound").attr('monster', data.monster['id']);
-              }, 2500);
-            }
-            var timer = setTimeout(function () {
-              if (data.status == 1) { //没有下一个怪物了
-                if(data.monster['sort'] >= 11){
-                  setTimeout(function () {
-                    location.reload()
-                  }, 2500);
-                }
-              } else if (data.status == 2) { //还有下一个怪物
-                clearTimeout(timer)
-                $(".compound").show()
-                split();
-              } else {
-                layer.msg("失败");
-              }
-            }, 4000);
+ // $('.compound').hide()
+  var monster = parseInt($(".compound").attr("monster"));
+  $.ajax({
+    url: "{:url('News/kill_monster')}",
+    data: {id: monster},
+    type: "post",
+    success: function (data) {
+      //合成完成直接获取下一个怪物
+      if(data.status >= 1){
+        //合成动画1700    
+        // $('.roleBg').fadeIn().delay(1000).fadeOut(500,function() {
+        //   $('#roleImg').attr('src', data.monster['image']);
+        //   $('#roleImg').attr('alt', data.monster['sort']);
+        // })
+        merge(data.monster['image'], data.monster['sort']);
+        setTimeout(function () {
+          $("#shiqi").html(data.monster['shiqi']);
+          $("#shuxing").html(data.monster['shuxing']);
+          $("#zhandouzhi").html(data.monster['zhandouzhi']);
+          $("#suoxunengliang").html(data.monster['suoxunengliang']);
+          $("#jinjie").html(data.monster['jinjie']);
+          $("#tedian").html(data.monster['tedian']);
+          $(".compound").attr('monster', data.monster['id']);
+        }, 2500);
+      }
+      var timer = setTimeout(function () {
+        if (data.status == 1) { //没有下一个怪物了
+          if(data.monster['sort'] >= 11){
+            setTimeout(function () {
+              location.reload()
+            }, 2500);
           }
-        })
+        } else if (data.status == 2) { //还有下一个怪物
+          clearTimeout(timer)
+          clicked = false
+        //  $(".compound").show()
+          split();
+        } else {
+          layer.msg("失败");
+        }
+      }, 4000);
+    }
+  })
+    }
+       
       })
 
   function split(){
@@ -261,6 +265,9 @@
           if ($(".compound:hidden").length) {
             console.log(111);
             $(".compound").show()
+            split();
+          }else{
+            clicked = false;
             split();
           }
         }
