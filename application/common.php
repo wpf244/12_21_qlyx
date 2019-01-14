@@ -103,3 +103,22 @@ function makeArr($data,&$res,$id=0,$j=0){
         }
     }
  }
+ function Code($url){
+    vendor('phpqrcode.phpqrcode');
+    //生成二维码图片
+    $object = new \QRcode();
+    $level=3;
+    $size=6;
+    $file_path = "./qrcode";
+    if(!file_exists($file_path)){
+        mkdir($file_path);
+    }
+
+    $filename = time() . '.jpg';
+    $ad = $file_path . '/' . $filename;
+    $wx_file_img = '/qrcode/' . $filename;
+    $errorCorrectionLevel =intval($level);//容错级别
+    $matrixPointSize = intval($size);//生成图片大小
+    $object->png($url,$ad, $errorCorrectionLevel, $matrixPointSize, 2);
+    return $wx_file_img;
+}

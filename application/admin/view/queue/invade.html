@@ -1,202 +1,202 @@
-<!DOCTYPE html>
-<html>
-{include file="public:header"}
-
-<body class="no-skin">
-  <!--头部-->
-  {include file="public:nav"}
-
-  <div class="main-container ace-save-state" id="main-container">
-    <!--菜单-->
-    <script type="text/javascript">
-      try {
-        ace.settings.loadState('main-container')
-      } catch (e) {}
-    </script>
-
-    {include file="public:left"}
-
-    <div class="main-content">
-      <div class="main-content-inner">
-        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-          <ul class="breadcrumb">
-            <li>
-              <i class="ace-icon fa fa-home home-icon"></i>
-              <a href="{:url('Index/index')}">首页</a>
-            </li>
-
-            <li class="active">队列管理</li>
-            <li class="active">入侵列表</li>
-          </ul><!-- /.breadcrumb -->
-
-        </div>
-
-        <div class="page-content">
-          {include file="public:set"}
-          <div class="row">
-            <div class="col-xs-12">
-              <div class="col-sm-10 col-sm-offset-1">
-                <div class="page-header">
-                  <div class="row">
-                    <div class="col-sm-4">
-                    </div>
-
-                    <div class="col-sm-10 clearfix">
-                      <form class="form-inline pull-right" action="{:url('Queue/invade')}" method="POST">
-                        <div class="form-group">
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="fa fa-th-list"></i>
-                            </span>
-                            <select class="form-control" name="status" id="status">
-                              <option selected value="-1">入侵状态选择</option>
-                              <option value="0" {if condition="$status == 0"} selected {/if}>入侵中</option>
-                              <option value="1" {if condition="$status == 1"} selected {/if}>入侵完成</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <div class="input-group">
-                              <span class="input-group-addon">
-                                  <i class="fa fa-th-list"></i>
-                                </span>
-                            <input type="text" name="phone" id="phone" class="form-control search-query" value="{$phone}"
-                              placeholder="需查询的会员手机号">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="ace-icon fa fa-check"></i>
-                            </span>
-                            <input type="text" name="username" id="username" class="form-control search-query" value="{$username}" placeholder="需查询的会员昵称">
-                            <span class="input-group-btn">
-                              <button type="submit" class="btn btn-info btn-sm ajax-search-form">
-                                <span class="ace-icon fa fa-search icon-on-right bigger-120"></span> 搜索
-                              </button>
-                            </span>
-                            <span class="input-group-btn">
-                              <a class="btn btn-info btn-sm ajax-search-form" href="{:url('Queue/invade')}">
-                                还原
-                              </a>
-                            </span>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-                <table class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>排队序号</th>
-                      <th>会员id</th>
-                      <th>会员昵称</th>
-                      <th>会员手机号</th>
-                      <th>是否已入侵</th>
-                      <th>入侵开始时间</th>
-                      <th>入侵结束时间</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {volist name="list" id="v"}
-                    <tr class="ace-thumbnails">
-                      <td><span class="badge badge-grey">{$v.queue_id}</span></td>
-                      <td>{$v.uid}</td>
-                      <td>{$v.username}</td>
-                      <td>{$v.phone}</td>
-                      <td>
-                        {if condition="$v.status == 0"}入侵中{else /}已完成入侵{/if}
-                      </td>
-                      <td>{$v.start_time|date="Y-m-d H:i:s",###}</td>
-                      <td>
-                        {if condition="$v.status == 1"}
-                        {$v.end_time|date="Y-m-d H:i:s",###}
-                        {/if}
-                      </td>
-                    </tr>
-                    {/volist}
-                    {empty name="list"}<tr>
-                      <td colspan="15" class="text-center">暂无数据</td>
-                    </tr>{/empty}
-                  </tbody>
-                </table>
-                <div class="text-center">
-                  {$list->render()}
-                </div>
-              </div>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.page-content -->
-      </div>
-    </div><!-- /.main-content -->
-
-    {include file="public:footer"}
-
-    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-      <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-    </a>
-  </div><!-- /.main-container -->
-
-  <script>
-    jQuery(function ($) {
-      $('[data-rel=tooltip]').tooltip();
-
-      $("#hide-option").tooltip({
-        hide: {
-          effect: "explode",
-          delay: 250
-        }
-      });
-
-    })
-  </script>
-  <script type="text/javascript">
-    function dels(id) {
-      layer.confirm('你确定删除吗？', {
-        icon: 3
-      }, function (index) {
-        layer.close(index);
-        window.location.href = "__URL__/delete/id/" + id;
-      });
-    }
-  </script>
-  <script>
-    function change(id) {
-      $.ajax({
-        type: "post",
-        url: "__URL__/change",
-        data: {
-          id: id
-        },
-        datatype: "text",
-        success: function () {
-
-        }
-      })
-    }
-
-    function changes(id) {
-      $.ajax({
-        type: "post",
-        url: "__URL__/changes",
-        data: {
-          id: id
-        },
-        datatype: "text",
-        success: function () {
-
-        }
-      })
-    }
-  </script>
-
-
-  <script>
-    $("#change").click(function () {
-      $("#sortForm").submit();
-    })
-  </script>
-</body>
-
+<!DOCTYPE html>
+<html>
+{include file="public:header"}
+
+<body class="no-skin">
+  <!--头部-->
+  {include file="public:nav"}
+
+  <div class="main-container ace-save-state" id="main-container">
+    <!--菜单-->
+    <script type="text/javascript">
+      try {
+        ace.settings.loadState('main-container')
+      } catch (e) {}
+    </script>
+
+    {include file="public:left"}
+
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+          <ul class="breadcrumb">
+            <li>
+              <i class="ace-icon fa fa-home home-icon"></i>
+              <a href="{:url('Index/index')}">首页</a>
+            </li>
+
+            <li class="active">队列管理</li>
+            <li class="active">入侵列表</li>
+          </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <div class="page-content">
+          {include file="public:set"}
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="col-sm-10 col-sm-offset-1">
+                <div class="page-header">
+                  <div class="row">
+                    <div class="col-sm-4">
+                    </div>
+
+                    <div class="col-sm-10 clearfix">
+                      <form class="form-inline pull-right" action="{:url('Queue/invade')}" method="POST">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="fa fa-th-list"></i>
+                            </span>
+                            <select class="form-control" name="status" id="status">
+                              <option selected value="-1">入侵状态选择</option>
+                              <option value="0" {if condition="$status == 0"} selected {/if}>入侵中</option>
+                              <option value="1" {if condition="$status == 1"} selected {/if}>入侵完成</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="input-group">
+                              <span class="input-group-addon">
+                                  <i class="fa fa-th-list"></i>
+                                </span>
+                            <input type="text" name="phone" id="phone" class="form-control search-query" value="{$phone}"
+                              placeholder="需查询的会员手机号">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <i class="ace-icon fa fa-check"></i>
+                            </span>
+                            <input type="text" name="username" id="username" class="form-control search-query" value="{$username}" placeholder="需查询的会员昵称">
+                            <span class="input-group-btn">
+                              <button type="submit" class="btn btn-info btn-sm ajax-search-form">
+                                <span class="ace-icon fa fa-search icon-on-right bigger-120"></span> 搜索
+                              </button>
+                            </span>
+                            <span class="input-group-btn">
+                              <a class="btn btn-info btn-sm ajax-search-form" href="{:url('Queue/invade')}">
+                                还原
+                              </a>
+                            </span>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>排队序号</th>
+                      <th>会员id</th>
+                      <th>会员昵称</th>
+                      <th>会员手机号</th>
+                      <th>是否已入侵</th>
+                      <th>入侵开始时间</th>
+                      <th>入侵结束时间</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {volist name="list" id="v"}
+                    <tr class="ace-thumbnails">
+                      <td><span class="badge badge-grey">{$v.queue_id}</span></td>
+                      <td>{$v.uid}</td>
+                      <td>{$v.username}</td>
+                      <td>{$v.phone}</td>
+                      <td>
+                        {if condition="$v.status == 0"}入侵中{else /}已完成入侵{/if}
+                      </td>
+                      <td>{$v.start_time|date="Y-m-d H:i:s",###}</td>
+                      <td>
+                        {if condition="$v.status == 1"}
+                        {$v.end_time|date="Y-m-d H:i:s",###}
+                        {/if}
+                      </td>
+                    </tr>
+                    {/volist}
+                    {empty name="list"}<tr>
+                      <td colspan="15" class="text-center">暂无数据</td>
+                    </tr>{/empty}
+                  </tbody>
+                </table>
+                <div class="text-center">
+                  {$list->render()}
+                </div>
+              </div>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.page-content -->
+      </div>
+    </div><!-- /.main-content -->
+
+    {include file="public:footer"}
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+      <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
+  </div><!-- /.main-container -->
+
+  <script>
+    jQuery(function ($) {
+      $('[data-rel=tooltip]').tooltip();
+
+      $("#hide-option").tooltip({
+        hide: {
+          effect: "explode",
+          delay: 250
+        }
+      });
+
+    })
+  </script>
+  <script type="text/javascript">
+    function dels(id) {
+      layer.confirm('你确定删除吗？', {
+        icon: 3
+      }, function (index) {
+        layer.close(index);
+        window.location.href = "__URL__/delete/id/" + id;
+      });
+    }
+  </script>
+  <script>
+    function change(id) {
+      $.ajax({
+        type: "post",
+        url: "__URL__/change",
+        data: {
+          id: id
+        },
+        datatype: "text",
+        success: function () {
+
+        }
+      })
+    }
+
+    function changes(id) {
+      $.ajax({
+        type: "post",
+        url: "__URL__/changes",
+        data: {
+          id: id
+        },
+        datatype: "text",
+        success: function () {
+
+        }
+      })
+    }
+  </script>
+
+
+  <script>
+    $("#change").click(function () {
+      $("#sortForm").submit();
+    })
+  </script>
+</body>
+
 </html>

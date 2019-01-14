@@ -108,7 +108,7 @@ class News extends BaseHome
 
      * 需要判断会员是否刚刚完成入侵（排队返现成功）
 
-     * 需要判断能量是否充足（100点）
+     * 需要判断天界币是否充足（100点）
 
      * 判断是否有需要击杀的怪物
 
@@ -208,15 +208,15 @@ class News extends BaseHome
 
             //没有传值
 
-            return $this->redirect("User/recharge_change");
+            return $this->redirect("User/bank_card");
 
         }
 
         if($user['money'] < $post_money){
 
-            //能量币不足，去充值
+            //天界币不足，去充值
 
-            return $this->redirect("User/recharge_change");
+            return $this->redirect("User/bank_card");
 
         }
 
@@ -336,7 +336,7 @@ class News extends BaseHome
 
      * 完成入侵页面
 
-     * 修改已查看状态，增加能量
+     * 修改已查看状态，增加天界币
 
      *
 
@@ -404,7 +404,7 @@ class News extends BaseHome
 
             }
 
-            $res_two = db("user")->where("uid=$uid")->setInc('money', $money); //给出队会员能量
+            $res_two = db("user")->where("uid=$uid")->setInc('money', $money); //给出队会员天界币
 
             if(!$res_one || !$res_two || $money == 0){
 

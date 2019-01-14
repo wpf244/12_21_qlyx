@@ -58,7 +58,7 @@ class Member extends BaseAdmin
 
     /**
 
-     * 充值能量币
+     * 充值天界币
 
      *
 
@@ -291,7 +291,21 @@ class Member extends BaseAdmin
         return $this->fetch("recharge");
 
     }
-
+    public function delete()
+    {
+        $id=input('id');
+        $re=db("user")->where("uid=$id")->find();
+        if($re){
+           $del=db("user")->where("uid=$id")->delete();
+           if($del){
+               echo '0';
+           }else{
+               echo '2';
+           }
+        }else{
+            echo '1';
+        }
+    }
 
 
 
@@ -410,45 +424,6 @@ class Member extends BaseAdmin
 
     }
 
-    public function delete()
-
-    {
-
-        $id=input('id');
-
-        $re=db("user")->where("uid=$id")->find();
-
-        if($re){
-
-            $data['pid']=$re['pid'];
-
-            $del=db("user")->where("uid=$id")->delete();
-
-            if($del){
-
-                $res=db("user")->where("pid=$id")->select();
-
-                if($res){
-
-                    $resss=db("user")->where("pid=$id")->update($data);
-
-                }
-
-                echo '0';
-
-            }else{
-
-                echo '1';
-
-            }
-
-        }else{
-
-            echo '2';
-
-        }
-
-    }
 
     public function modifys()
 

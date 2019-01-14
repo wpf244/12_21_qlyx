@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="GB2312">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>天界Ⅱ</title>
+
+    <link rel="stylesheet" href="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="__HOME__/css/style.min.css">
+    <script src="__HOME__/js/jquery-2.1.4.min.js"></script>
+
+
+    <script src="__HOME__/lib/jquery-mobile/jquery.mobile-1.4.5.min.js"></script>
+    <script>
+        $(document).on("pageshow","#invade",function(){
+                    setTimeout(function() {
+                      $('.venom').addClass('move')
+                    }, 600)
+                  });
+                  $(document).on("pagehide","#invade",function(){
+                    $('.venom').removeClass('move')
+                  });
+                  $('a').attr("data-ajax","false")
+                </script>
+
+    <script src="__HOME__/js/main.js"></script>
+    <script src="__ADMIN__/assets/layer/layer.js"></script>
+    <script src="__ADMIN__/assets/js/jquery.form.js"></script>
+</head>
+
+<body>
+    <div class="user" data-role="page" id="deposit" data-theme="c">
+        <div class="ui-content" data-role="main" data-theme="c">
+            <div class="header">请扫描二维码充值<a class="back" href="#" data-rel="back"></a></div>
+            <div style="text-align:center;margin-top: 20vw;">
+
+                <img src="{$ewm}" />
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+        function check() {
+            var dingdan = "{$orderid}";
+            $.ajax({
+                type : "POST",
+                url : "__URL__/getjie",
+                data : {code:dingdan},
+                dataType : "text",
+                success : function(re){
+                    if(re==1){
+                       alert("付款成功！");
+                        window.location.href = "{:url('News/index')}";
+                     
+                      //   clearInterval(time);
+                    }else{
+                        return false;
+                    }
+                }
+            });
+        }
+       window.setInterval(check,3000);
+    </script>
+</body>
+
+</html>

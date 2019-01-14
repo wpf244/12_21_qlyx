@@ -32,15 +32,15 @@ return [
 
     // 数据库名
 
-    'database'        => '12_22_qlyx',
+    'database'        => 'quanlixiaoyouxi_',
 
     // 用户名
 
-    'username'        => 'root',
+    'username'        => 'quanlixiaoyouxi_',
 
     // 密码
 
-    'password'        => 'root',
+    'password'        => 'xtCwzwys64wdMKd7',
 
     // 端口
 

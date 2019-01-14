@@ -7,7 +7,7 @@
         <div class="flex flex-between">
           <div class="info">
             <p>昵称: {$re.username}</p>
-            <p>剩余能量: {$re.money}</p>
+            <p>剩余天界币: {$re.money}</p>
           </div>
           <div class="action">
             <div class="rule"></div><a class="user" data-ajax="false" href="{:url('User/index')}"></a><a class="video" data-ajax="false" href="{:url('News/video')}"></a>
@@ -75,7 +75,7 @@
         <div class="flex flex-between">
           <div class="info">
               <p>昵称: {$re.username}</p>
-              <p>剩余能量: {$re.money}</p>
+              <p>剩余天界币: {$re.money}</p>
           </div>
           <div class="action">
               <div class="rule"></div><a class="user" data-ajax="false" href="{:url('User/index')}"></a><a class="video" data-ajax="false" href="{:url('News/video')}"></a>
@@ -89,25 +89,25 @@
         <div class="rule-wrapper">
             <ul class="inner">
               {$reb.desc}
-              <div class="rpb">注：本活动最终解释权归{$sys.name}公司所有</div>
+              <!-- <div class="rpb">注：本活动最终解释权归{$sys.name}公司所有</div> -->
             </ul>
         </div>
         <div class="find-wrapper">
           <ul class="inner">
             {if condition="$re.level >= 1"}
-            <li class="item"><a href="{:url('News/invade', array('level'=>100))}" data-ajax="false">淘气狐狸:100能量<img src="__HOME__/img/lv1.png" alt=""></a></li>
+            <li class="item"><a href="{:url('News/invade', array('level'=>100))}" data-ajax="false">淘气狐狸:100天界币<img src="__HOME__/img/lv1.png" alt=""></a></li>
             {/if}
             {if condition="$re.level >= 2"}
-            <li class="item"><a href="{:url('News/invade', array('level'=>1000))}" data-ajax="false">荣耀青龙:1000能量<img src="__HOME__/img/lv2.png" alt=""></a></li>
+            <li class="item"><a href="{:url('News/invade', array('level'=>1000))}" data-ajax="false">荣耀青龙:1000天界币<img src="__HOME__/img/lv2.png" alt=""></a></li>
             {/if}
             {if condition="$re.level >= 3"}
-            <li class="item"><a href="{:url('News/invade', array('level'=>10000))}" data-ajax="false">尊贵白虎:10000能量<img src="__HOME__/img/lv3.png" alt=""></a></li>
+            <li class="item"><a href="{:url('News/invade', array('level'=>10000))}" data-ajax="false">尊贵白虎:10000天界币<img src="__HOME__/img/lv3.png" alt=""></a></li>
             {/if}
             {if condition="$re.level >= 4"}
-            <li class="item"><a href="{:url('News/invade', array('level'=>100000))}" data-ajax="false">永恒朱雀:100000能量<img src="__HOME__/img/lv4.png" alt=""></a></li>
+            <li class="item"><a href="{:url('News/invade', array('level'=>100000))}" data-ajax="false">永恒朱雀:100000天界币<img src="__HOME__/img/lv4.png" alt=""></a></li>
             {/if}
             {if condition="$re.level >= 5"}
-            <li class="item"><a href="{:url('News/invade', array('level'=>1000000))}" data-ajax="false">最强玄武:1000000能量<img src="__HOME__/img/lv5.png" alt=""></a></li>
+            <li class="item"><a href="{:url('News/invade', array('level'=>1000000))}" data-ajax="false">最强玄武:1000000天界币<img src="__HOME__/img/lv5.png" alt=""></a></li>
             {/if}
           </ul>
         </div>

@@ -95,7 +95,7 @@
       .txtScroll-top .infoList li{ height:24px; line-height:24px;   }
       .txtScroll-top .infoList li .date{ float:right; color:#999;  }
       .invadeinfo {
-        padding: 30px 0 30px 30px;
+        padding: 30px 0 30px 16px;
       }
       .phone {
         color: red;
@@ -124,7 +124,7 @@
             <tr>
               <td>战斗值</td>
               <td id="zhandouzhi">{$monster.zhandouzhi}</td>
-              <td>所需能量</td>
+              <td>所需天界币</td>
               <td id="suoxunengliang">{$monster.suoxunengliang}</td>
             </tr>
             <tr>
@@ -140,7 +140,7 @@
       <div class="action"><a class="user" href="{:url('User/index')}" data-ajax="false"></a><a class="video" href="{:url('News/video')}"
           data-ajax="false"></a></div>
     </div>
-    <audio src="__HOME__/music.mp3" autoplay loop></audio>
+    <!-- <audio src="__HOME__/music.mp3" autoplay loop></audio> -->
     <div class="invadeinfo" style="color:aliceblue;font-size:13px;">
       <div class="txtScroll-top">
         <div class="bd">
@@ -164,11 +164,12 @@
       width: '280px'
     })
   }
-  var clicked = false
+  var clicked = false;
+  var kai = 0;
   $('.compound').click(function () {
     if(!clicked){
       $('.compound').attr('data-statu', 1)
-  
+      clicked = true
  // $('.compound').hide()
   var monster = parseInt($(".compound").attr("monster"));
   $.ajax({
@@ -196,12 +197,14 @@
       }
       var timer = setTimeout(function () {
         if (data.status == 1) { //没有下一个怪物了
+          kai = 1 ;
           if(data.monster['sort'] >= 11){
             setTimeout(function () {
               location.reload()
             }, 2500);
           }
         } else if (data.status == 2) { //还有下一个怪物
+          kai = 0;
           clearTimeout(timer)
           clicked = false
         //  $(".compound").show()
@@ -212,6 +215,8 @@
       }, 4000);
     }
   })
+    }else{
+      layer.msg("等待能量值");
     }
        
       })
@@ -280,12 +285,12 @@
   
  // djs();
  
-  time1 =setInterval(function(){
+ setInterval(function(){
     var status=$('.compound').data('statu');
    if(status == 0){
     djs();
    }else{
-     if($(".compound:visible").length){
+     if(kai == 1){
       djs();
      }
    }
@@ -297,20 +302,26 @@
   function getRandom(min, max){
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
-  var phoneList = []
-  for(let i = 0; i < 100; i++) {
-    var phone = '1'
-    for(let i = 0; i < 10; i++) {
-      var item = getRandom(3,9)
-      if(i >= 2 && i <= 5) item = '*'
-      phone += item
-    }
-    phoneList.push(phone)
-  }
-  for(let i of phoneList) {
-    $('.infoList').append('<li>恭喜<span class="phone">'+ i +'</span>玩家契约达成</li>')
-  }
-  $(".txtScroll-top").slide({mainCell:".bd ul",autoPlay:true,effect:"topMarquee",vis:8,interTime:50,trigger:"click"});
+   // 合法号段
+   var goodNum = ['134','135','136','137','138','139','147','150','151','152','157','158','159','182','183','184','187','188','130','131','132','145','155','156','176','185','186','133','153','177','180','181','189']
+
+var phoneList = []
+
+for(let i = 0; i < 100; i++) {
+        var phone = goodNum[getRandom(0,goodNum.length - 1)] + '****'
+
+        for(let i = 0; i < 4; i++) {
+          var item = getRandom(0,9)
+          phone += item
+        }
+        phoneList.push(phone)
+      }
+
+for(let i of phoneList) {
+  $('.infoList').append('<li>恭喜用户<span class="phone">'+ i +'</span>玩家契约达成</li>')
+  
+}
+$(".txtScroll-top").slide({mainCell:".bd ul",autoPlay:true,effect:"topMarquee",vis:8,interTime:50,trigger:"click"});
 </script>
 
 </html>
