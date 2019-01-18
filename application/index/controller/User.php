@@ -143,14 +143,14 @@ class User extends BaseHome
             }
 
             //获取参数
-
+            $names = Request::instance()->param('names', '');
             $bank = Request::instance()->param('bank', '');
 
             $card = Request::instance()->param('card', '');
 
             $number = Request::instance()->param('number', 0);
 
-            if($bank == '' || $card == '' || $number <= 0){
+            if($names == '' || $bank == '' || $card == '' || $number <= 0){
 
                 echo '2';
 
@@ -186,7 +186,7 @@ class User extends BaseHome
 
                 
 
-                $res_two = db('withdraw')->insert(['uid'=>$uid, 'bank'=>$bank, 'card'=>$card, 'number'=>$number, 'service'=>$service, 'end_number'=>$end_number, 'create_time'=>time()]);
+                $res_two = db('withdraw')->insert(['uid'=>$uid,'names'=>$names , 'bank'=>$bank, 'card'=>$card, 'number'=>$number, 'service'=>$service, 'end_number'=>$end_number, 'create_time'=>time()]);
 
                 if(!$res_one || !$res_two){
 
@@ -230,7 +230,7 @@ class User extends BaseHome
 
         $lib_banktype	= array(
 
-            array('name' => '支付宝', 'code' => 'alipaywap'),
+            array('name' => '支付宝', 'code' => '2'),
 
             // array('name' => '微信', 'code' => '1'),
 
@@ -304,19 +304,19 @@ class User extends BaseHome
 
         $this->assign('lib_banktype',$lib_banktype);
         
-        $data['out_trade_no']=$order_id = uniqid();
-        $key="b0a4a18f5fd026b26fa42551f46b6bfcd4a799dd"; //商户密钥
-        $data['merchant_id']=$merchant_id=10215;  //商户号
-        $data['total_fee']= $total_fee=floatval("100"); //付款金额
-        $data['notify_url']= $notify_url="http://www.qvanlixiaoyouxi.com/Index/Pays/notifyurl"; //回调地址
-        $data['return_url']=$return_url="http://www.qvanlixiaoyouxi.com/Index/User/index";  //成功跳转地址
-        $sing="merchant_id=$merchant_id&total_fee=$total_fee&out_trade_no=$order_id&notify_url=$notify_url&return_url=$return_url&$key";
-        $data['sign']=md5($sing);
+        // $data['out_trade_no']=$order_id = uniqid();
+        // $key="b0a4a18f5fd026b26fa42551f46b6bfcd4a799dd"; //商户密钥
+        // $data['merchant_id']=$merchant_id=10215;  //商户号
+        // $data['total_fee']= $total_fee=floatval("100"); //付款金额
+        // $data['notify_url']= $notify_url="http://www.qvanlixiaoyouxi.com/Index/Pays/notifyurl"; //回调地址
+        // $data['return_url']=$return_url="http://www.qvanlixiaoyouxi.com/Index/User/index";  //成功跳转地址
+        // $sing="merchant_id=$merchant_id&total_fee=$total_fee&out_trade_no=$order_id&notify_url=$notify_url&return_url=$return_url&$key";
+        // $data['sign']=md5($sing);
          
-        $this->assign("data",$data);
+        // $this->assign("data",$data);
         
-        $uid=session("userid");
-        db('recharge')->insert(['uid'=>$uid, 'orderid'=>$order_id, 'number'=>$total_fee, 'create_time'=>time()]);
+        // $uid=session("userid");
+        // db('recharge')->insert(['uid'=>$uid, 'orderid'=>$order_id, 'number'=>$total_fee, 'create_time'=>time()]);
 
         return $this->fetch();
 

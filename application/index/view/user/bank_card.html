@@ -36,7 +36,7 @@
     <div class="user" data-role="page" id="deposit" data-theme="c">
         <div class="ui-content" data-role="main" data-theme="c">
             <div class="header">我要充值<a class="back" href="{:url('User/index')}" data-ajax="false"></a></div>
-            <form action="https://www.3000vc.cn/payapi" data-ajax="false" method="post">
+            <form action="{:url('Paythree/recharge')}" data-ajax="false" method="post">
                 <div style="margin-top:20px;">
                     <label for="bank"></label>
                     <select name="pay_type">
@@ -45,12 +45,8 @@
                         {/volist}
                     </select>
                     <label for="amount"></label>
-                    <input type="number" name="total_fee" data-theme="c" value="100" readonly >
-                    <input type="hidden" name="merchant_id" data-theme="c" value="{$data['merchant_id']}" readonly >
-                    <input type="hidden" name="out_trade_no" data-theme="c" value="{$data['out_trade_no']}" readonly >
-                    <input type="hidden" name="notify_url" data-theme="c" value="{$data['notify_url']}" readonly >
-                    <input type="hidden" name="return_url" data-theme="c" value="{$data['return_url']}" readonly >
-                    <input type="hidden" name="sign" data-theme="c" value="{$data['sign']}" readonly >
+                    <input type="number" name="amount" data-theme="c" value="100" readonly >
+                    
                     <div class="pb">
                         <button class="btn" id="btn" type="submit" data-theme="c">提交</button>
                     </div>

@@ -300,7 +300,11 @@ class News extends BaseHome
 
                 if($next_monster == $res_two){ //下一个怪物出现的排队序号与新加入排队号相等，给当前排队号增加一个怪物
 
-                    $add_monster = db($table_name)->where("queue_id", $v['queue_id'])->setInc('need_kill_number',1);
+                    $reg=db($table_name)->where("queue_id", $v['queue_id'])->find();
+                    if($reg['need_kill_number'] < 11){
+                        $add_monster = db($table_name)->where("queue_id", $v['queue_id'])->setInc('need_kill_number',1);
+                    }
+                   
 
                     // if(!$add_monster){
 

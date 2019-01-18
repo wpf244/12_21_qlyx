@@ -174,7 +174,7 @@ class Member extends BaseAdmin
 
         }
 
-        $list = db("withdraw")->alias('w')->field('w.id, w.status, w.bank, w.card, w.number, w.service, w.end_number, w.create_time, w.audit_time, w.over_time, u.phone, u.username')->where($map)->join('ddsc_user u', 'u.uid=w.uid')->order("w.status asc")->order('create_time desc')->paginate(10,false,['query'=>request()->param()]);
+        $list = db("withdraw")->alias('w')->field('w.id, w.status,w.names , w.bank, w.card, w.number, w.service, w.end_number, w.create_time, w.audit_time, w.over_time, u.phone, u.username')->where($map)->join('ddsc_user u', 'u.uid=w.uid')->order("w.status asc")->order('create_time desc')->paginate(10,false,['query'=>request()->param()]);
 
         $this->assign('list', $list);
 

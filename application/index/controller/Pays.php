@@ -15,57 +15,84 @@ class Pays extends Controller
 {
 
     public function notifyurl()
+       {
+            $amount        = trim(input('amount'));
 
-    {
-
-    $key="b0a4a18f5fd026b26fa42551f46b6bfcd4a799dd";
-        
-        $merchant_id        = trim(input('merchant_id'));
-
-        $status        = trim(input('status'));
-
-        $order_no         = trim(input('order_no'));
-        
-        $total_fee         = trim(input('total_fee'));
-        
-        $out_trade_no      = trim(input('out_trade_no'));
-        
-        $pay_type         = trim(input('pay_type'));
-        
-        $sign              = trim(input('sign'));
-
-       
-        
-        $sing = "merchant_id=$merchant_id&status=$status&order_no=$order_no&out_trade_no=$out_trade_no&total_fee=$total_fee&pay_type=$pay_type&$key";
-
-        $signs=md5($sing);
-        
-        if($sign == $signs){
-            if($status == 1){
+            $ordernum         = trim(input('ordernum'));
             
+            $payresult         = trim(input('payresult'));
             
-            
-                $re=db("recharge")->where("orderid= '$out_trade_no' ")->find();
+            if($payresult == 0){
+                $re=db("recharge")->where("orderid= '$ordernum' ")->find();
             
                 if($re['status'] == 0){
             
-                   $res=db("recharge")->where("orderid= '$out_trade_no' ")->setField("status",1);
-                     
+                $res=db("recharge")->where("orderid= '$ordernum' ")->setField("status",1);
+                    
                     $uid=$re['uid'];
             
-                    db("user")->where("uid=$uid")->setInc("money",$total_fee);
+                    db("user")->where("uid=$uid")->setInc("money",$amount);
                     $user = db("user")->where("uid", $uid)->find();
                     if($user['status'] == 0){
                         db("user")->where("uid", $uid)->setField("status",1);
                     }
             
                }
-            
             }
-        }
+            echo 0;
+       }
+    // public function notifyurl()
+
+    // {
+
+    // $key="b0a4a18f5fd026b26fa42551f46b6bfcd4a799dd";
+        
+    //     $merchant_id        = trim(input('merchant_id'));
+
+    //     $status        = trim(input('status'));
+
+    //     $order_no         = trim(input('order_no'));
+        
+    //     $total_fee         = trim(input('total_fee'));
+        
+    //     $out_trade_no      = trim(input('out_trade_no'));
+        
+    //     $pay_type         = trim(input('pay_type'));
+        
+    //     $sign              = trim(input('sign'));
+
+       
+        
+    //     $sing = "merchant_id=$merchant_id&status=$status&order_no=$order_no&out_trade_no=$out_trade_no&total_fee=$total_fee&pay_type=$pay_type&$key";
+
+    //     $signs=md5($sing);
+        
+    //     if($sign == $signs){
+    //         if($status == 1){
+            
+            
+            
+    //             $re=db("recharge")->where("orderid= '$out_trade_no' ")->find();
+            
+    //             if($re['status'] == 0){
+            
+    //                $res=db("recharge")->where("orderid= '$out_trade_no' ")->setField("status",1);
+                     
+    //                 $uid=$re['uid'];
+            
+    //                 db("user")->where("uid=$uid")->setInc("money",$total_fee);
+    //                 $user = db("user")->where("uid", $uid)->find();
+    //                 if($user['status'] == 0){
+    //                     db("user")->where("uid", $uid)->setField("status",1);
+    //                 }
+            
+    //            }
+            
+    //         }
+    //     }
 
 
-    }
+    // }
 
     public function index()
 

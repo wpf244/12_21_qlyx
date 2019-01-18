@@ -101,6 +101,7 @@
                                             <th>打款金额</th>
                                             <th>银行卡号</th>
                                             <th>开户行</th>
+                                            <th>开户姓名</th>
                                             <th>提现时间</th>
                                             <th>状态</th>
                                             <th>操作</th>
@@ -120,6 +121,7 @@
                                             <td>{$v.end_number}</td>
                                             <td>{$v.card}</td>
                                             <td>{$v.bank}</td>
+                                            <td>{$v.names}</td>
                                             <th>
                                                 申请时间：{$v.create_time|date="Y-m-d H:i:s",###}<br>
                                                 审核时间：{if condition="$v.status >= 1"}{$v.audit_time|date="Y-m-d H:i:s",###}{/if}<br>

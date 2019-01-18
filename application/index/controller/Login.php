@@ -46,6 +46,11 @@ class Login extends Common
 
         $data['time']=time();
 
+        $reu=db("user")->where("phone='$phone'")->find();
+        if($reu){
+            echo '1';
+        }else{
+
         $re=\db("sms_code")->where("phone='$phone'")->find();
 
         if($re){
@@ -60,7 +65,7 @@ class Login extends Common
 
         Post($phone,$code);
 
-
+     }
 
     }
 

@@ -14,6 +14,11 @@
 
         <div style="margin-top:20px;">
 
+            <label for="names"></label>
+
+            <input id="names" type="text" name="names" data-theme="c" data-clear-btn="true" placeholder="请输入开户姓名" required>
+            
+
             <label for="bank"></label>
 
             <input id="bank" type="text" name="bank" data-theme="c" data-clear-btn="true" placeholder="请输入开户银行" required>
@@ -48,6 +53,8 @@
     <script>
 
     $("#btn").click(function(){
+
+        var names=$.trim($("input[name=names]").val());
 
         var bank=$.trim($("input[name=bank]").val());
 
@@ -96,7 +103,7 @@
 
             url:"{:url('User/withdraw_save')}",
 
-            data:{bank: bank, card: card, number: number},
+            data:{names:names ,bank: bank, card: card, number: number},
 
             dataType:"text",
 
