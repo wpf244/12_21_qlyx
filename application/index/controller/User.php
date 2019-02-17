@@ -220,6 +220,9 @@ class User extends BaseHome
 
     public function recharge_change(){
 
+        $re=db("lb")->where("fid=7")->find();
+        $this->assign("re",$re);
+
         return $this->fetch();
 
     }
@@ -230,7 +233,12 @@ class User extends BaseHome
 
         $lib_banktype	= array(
 
-            array('name' => '支付宝', 'code' => '2'),
+            array('name' => '支付宝WAP', 'code' => '1003'),
+        //     array('name' => '微信WAP', 'code' => '1007'),
+        //     array('name' => '支付宝', 'code' => '992'),  
+        //    array('name' => '微信支付', 'code' => '1004'),
+
+           // array('name' => '支付宝', 'code' => '2'),
 
             // array('name' => '微信', 'code' => '1'),
 
@@ -317,6 +325,10 @@ class User extends BaseHome
         
         // $uid=session("userid");
         // db('recharge')->insert(['uid'=>$uid, 'orderid'=>$order_id, 'number'=>$total_fee, 'create_time'=>time()]);
+        $arr=array("100.01","100.02","100.03","100.04","100.05","100.06","100.07","100.08","100.09","100.1","100.11","100.12","100.13","100.14","100.15","100.16","100.17","10018","100.19","100.2");
+        $k=mt_rand(0,19);
+        $money=$arr[$k];
+        $this->assign("money",$money);
 
         return $this->fetch();
 

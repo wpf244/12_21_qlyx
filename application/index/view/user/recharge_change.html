@@ -4,14 +4,29 @@
   <body>
     <div class="user" data-role="page" id="toup" data-theme="c">
       <div class="ui-content" data-role="main" data-theme="c">
-        <div class="header">我要充值<a class="back" href="#" data-rel="back"></a></div>
+        <div class="header">我要充值<a class="back" href="#" ></a></div>
         <div style="margin-top:20px;">
           <p>选择充值方式</p>
           <ul class="nostyle paylist">
-            <li><a href="{:url('User/bank_card')}" data-ajax="false">银行卡</a></li>
+            <!-- <li><a href="{:url('User/bank_card')}" data-ajax="false">银行卡</a></li> -->
+            <li class="codebtn">二维码</li>
           </ul>
         </div>
       </div>
     </div>
+    <div class="modal" id="codeModal">
+      <div class="shade">
+        <div class="inner" style="width: 340px;height:349px;background-image:url(__HOME__/img/codeBg.png);background-size: contain;padding: 66px 47px;overflow: hidden;">
+          <img width="100%" src="{$re.image}" alt="">
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      $('.codebtn').click(function() {
+          $('#codeModal').fadeIn()
+      })
+   
+    </script>
   </body>
 </html>

@@ -208,7 +208,7 @@ class News extends BaseHome
 
             //没有传值
 
-            return $this->redirect("User/bank_card");
+            return $this->redirect("User/recharge_change");
 
         }
 
@@ -216,7 +216,7 @@ class News extends BaseHome
 
             //天界币不足，去充值
 
-            return $this->redirect("User/bank_card");
+            return $this->redirect("User/recharge_change");
 
         }
 

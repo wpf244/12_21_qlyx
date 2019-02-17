@@ -35,17 +35,17 @@
 <body>
     <div class="user" data-role="page" id="deposit" data-theme="c">
         <div class="ui-content" data-role="main" data-theme="c">
-            <div class="header">我要充值<a class="back" href="{:url('User/index')}" data-ajax="false"></a></div>
+            <div class="header">我要充值<a class="back" href="{:url('User/recharge_change')}" data-ajax="false"></a></div>
             <form action="{:url('Paythree/recharge')}" data-ajax="false" method="post">
                 <div style="margin-top:20px;">
                     <label for="bank"></label>
-                    <select name="pay_type">
+                    <select name="bank_type">
                         {volist name="lib_banktype" id="item"}
                         <option value="{$item.code}">{$item.name}</option>
                         {/volist}
                     </select>
                     <label for="amount"></label>
-                    <input type="number" name="amount" data-theme="c" value="100" readonly >
+                    <input type="number" name="amount" data-theme="c" value="110" readonly >
                     
                     <div class="pb">
                         <button class="btn" id="btn" type="submit" data-theme="c">提交</button>

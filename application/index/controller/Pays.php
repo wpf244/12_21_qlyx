@@ -94,11 +94,11 @@ class Pays extends Controller
 
     // }
 
-    public function index()
+    public function notifyurl()
 
     {
 
-    //    $this->redirect("User/index");
+    
 
         header('Content-Type:textml;charset=GB2312');
 
@@ -144,9 +144,13 @@ class Pays extends Controller
                 $user = db("user")->where("uid", $uid)->find();
                 if($user['status'] == 0){
                     db("user")->where("uid", $uid)->setField("status",1);
+                    $fid=$user['fid'];
+                    if($fid != 0){
+                        db("user")->where("uid=$fid")->setInc("money",10);
+                    }
                 }
 
-                $this->redirect("User/index");
+                die("opstate=0");
 
                
 
@@ -154,7 +158,7 @@ class Pays extends Controller
 
         }
 
-        $this->redirect("User/index");
+        die("opstate=0");
 
     }
 
